@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vosk;
 using Microsoft.Speech.Recognition.SrgsGrammar;
 using Microsoft.Speech.Recognition;
 using System.Speech.Synthesis;

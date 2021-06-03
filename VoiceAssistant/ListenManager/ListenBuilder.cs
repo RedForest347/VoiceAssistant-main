@@ -11,8 +11,8 @@ namespace VoiceAssistant
         Dictionary<string, RecogniseData> recogniseDictionary;
         List<List<string>> choicesList;
 
-        public Dictionary<string, RecogniseData> GetRecogniseDictionary { get;}
-        public List<List<string>> GetChoicesList { get;}
+        public Dictionary<string, RecogniseData> GetRecogniseDictionary { get => recogniseDictionary; }
+        public List<List<string>> GetChoicesList { get => choicesList; }
 
         public ListenBuilder()
         {
@@ -129,10 +129,10 @@ namespace VoiceAssistant
             }
             Debug.Log("------------------------------------------");
 
-            if (recogniseDictionary.ContainsKey("открой"))
+            /*if (recogniseDictionary.ContainsKey("открой"))
             {
                 recogniseDictionary["открой"].Recognised(new string[] { "открой", "новый", "блокнот" });
-            }
+            }*/
 
             //Debug.LogWarning("End DebugRecogniseDictionary");
         }

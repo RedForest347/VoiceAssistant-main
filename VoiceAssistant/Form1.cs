@@ -37,8 +37,9 @@ namespace VoiceAssistant
 
         void LoadListenManager()
         {
-            ListenManager lm = new ListenManager();
-            lm.Init();
+            ListenBuilder builder = new ListenBuilder();
+            builder.Build();
+            ListenManager lm = new ListenManager(builder);
             lm.Start();
         }
 

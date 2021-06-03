@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+//using System.Text.Json;
+//using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace VoiceAssistant
 {
@@ -16,28 +20,47 @@ namespace VoiceAssistant
     class ListenManager
     {
         Dictionary<string, RecogniseData> recogniseDictionary;
-        List<List<string>> ChoicesList;
+        List<List<string>> choicesList;
 
 
 
-        public ListenManager()
+        public ListenManager(ListenBuilder builder)
         {
+            recogniseDictionary = builder.GetRecogniseDictionary;
+            choicesList = builder.GetChoicesList;
 
+            if (recogniseDictionary.ContainsKey("открой"))
+            {
+                recogniseDictionary["открой"].Recognised(new string[] { "открой", "новый", "блокнот" });
+            }
         }
 
-        public void Init()
+        void Init()
         {
             recogniseDictionary = new Dictionary<string, RecogniseData>();
-            ChoicesList = new List<List<string>>();
-
-            LoadAllServices();
-
-            DebugRecogniseDictionary();
+            choicesList = new List<List<string>>();
         }
 
         public void Start()
         {
+            string content;
+            StreamReader sr = new StreamReader(@"data\settings.txt");
+            //Read the first line of text
+            content = sr.ReadLine();
+            Debug.Log(content);
 
+            ListenData ld = new ListenData();
+            ld.assistentName = "Алиса";
+            ld.userName = "Рэд";
+
+            //string json = JsonSerializer.Serialize(ld);
+            //ld = JsonSerializer.Deserialize<ListenData>(json);
+            //Debug.Log(JsonSerializer.Serialize(Encoding.UTF8.GetString(Encoding.UTF8.GetBytes("Рэд"))));
+            string json = JsonConvert.SerializeObject(ld, Formatting.Indented);
+            Debug.Log(json);
+            Debug.Log(JsonConvert.DeserializeObject<ListenData>(json).userName);
+            //Debug.Log(ld.userName);
+            
         }
 
         public void Stop()
@@ -46,111 +69,20 @@ namespace VoiceAssistant
         }
 
 
-        void LoadAllServices()
+
+
+
+        private class ListenData
         {
-            LoadService(new OpenFolderService());
+            //[JsonPropertyName("assistentName")]
+            [Newtonsoft.Json.JsonIgnore]
+            public string assistentName { get; set; }
 
-            recogniseDictionary["открой"].Recognised(new string[] {"открой", "новый", "блокнот" });
-            //AddServiceWordsToChoicesList(new OpenFolderService().GetInitData());
-        }
-
-        void LoadService(ServiceBase service)
-        {
-            ServiceData data = service.GetInitData();
-            AddServiceWordsToChoicesList(data);
-            AddServiceToEvents(data);
-            //service.Init(this);
-        }
-
-        void AddServiceWordsToChoicesList(ServiceData serviceData)
-        {
-            PrepareRecogniseDictionary(serviceData);
-            PrepareChoicesList(serviceData);
-
-            List<List<string>> wordGroups = serviceData.wordGroups;
-
-            for (int group = 0; group < wordGroups.Count; group++)
-            {
-                ChoicesList[group].AddRange(wordGroups[group]);
-                ChoicesList[group].Distinct();
-            }
-        }
-
-        //создаются все недостающие ключи
-        void PrepareRecogniseDictionary(ServiceData serviceData)
-        {
-            List<List<string>> wordGroups = serviceData.wordGroups;
-            
-            if (wordGroups.Count != 0 && wordGroups[0].Count != 0)
-            {
-                for (int word = 0; word < wordGroups[0].Count; word++)
-                {
-                    string key = wordGroups[0][word];
-                    if (!recogniseDictionary.ContainsKey(key))
-                    {
-                        recogniseDictionary.Add(key, new RecogniseData());
-                    }
-                    else
-                    {
-                        Debug.LogWarning("ключевое слово " + key + " присутствует в другом сервисе, помимо сервиса"
-                            + serviceData.serviceName + ". это может вызвать ложные вызовы");
-                    }
-                }
-            }
-
+            //[JsonPropertyName("userName")]
+            [Newtonsoft.Json.JsonProperty("ddd")]
+            public string userName { get; set; }
 
         }
-
-        //добавляет необходимые уровни ключевых слов
-        void PrepareChoicesList(ServiceData serviceData)
-        {
-            List<List<string>> wordGroups = serviceData.wordGroups;
-
-            for (int group = 0; group < wordGroups.Count; group++)
-            {
-                if (ChoicesList.Count <= group)
-                {
-                    ChoicesList.Add(new List<string>());
-                }
-            }
-        }
-
-        void AddServiceToEvents(ServiceData serviceData)
-        {
-            List<List<string>> wordGroups = serviceData.wordGroups;
-
-            if (wordGroups.Count != 0 && wordGroups[0].Count != 0)
-            {
-                for (int word = 0; word < wordGroups[0].Count; word++)
-                {
-                    string key = wordGroups[0][word];
-                    recogniseDictionary[key].onRecognise += serviceData.service.OnRecognised;
-                    recogniseDictionary[key].services.Add(serviceData.service);
-                }
-            }
-        }
-
-
-        void DebugRecogniseDictionary()
-        {
-            //Debug.LogWarning("Start DebugRecogniseDictionary");
-
-            for (int i = 0; i < ChoicesList.Count; i++)
-            {
-                Debug.Log("------------------------------------------");
-                for (int j = 0; j < ChoicesList[i].Count; j++)
-                {
-                    Debug.Log("    " + (i + 1) + "." + (j + 1) + ") = " + ChoicesList[i][j]);
-                }
-            }
-            Debug.Log("------------------------------------------");
-
-
-
-
-            //Debug.LogWarning("End DebugRecogniseDictionary");
-        }
-
     }
 
 }
