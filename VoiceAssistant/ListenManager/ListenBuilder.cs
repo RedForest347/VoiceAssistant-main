@@ -81,8 +81,6 @@ namespace VoiceAssistant
                     }
                 }
             }
-
-
         }
 
         //добавляет необходимые уровни ключевых слов
@@ -117,8 +115,6 @@ namespace VoiceAssistant
 
         void DebugRecogniseDictionary()
         {
-            //Debug.LogWarning("Start DebugRecogniseDictionary");
-
             for (int i = 0; i < choicesList.Count; i++)
             {
                 Debug.Log("------------------------------------------");
@@ -128,13 +124,6 @@ namespace VoiceAssistant
                 }
             }
             Debug.Log("------------------------------------------");
-
-            /*if (recogniseDictionary.ContainsKey("открой"))
-            {
-                recogniseDictionary["открой"].Recognised(new string[] { "открой", "новый", "блокнот" });
-            }*/
-
-            //Debug.LogWarning("End DebugRecogniseDictionary");
         }
     }
 }

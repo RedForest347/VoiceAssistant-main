@@ -25,6 +25,8 @@ namespace VoiceAssistant
         List<List<string>> choicesList;
         ListenSettings ls;
 
+        SpeechRecognitionEngine current_sre;
+        EventHandler<SpeechRecognizedEventArgs> onRecogniseCurrent;
 
 
         public ListenManager(ListenBuilder builder)
@@ -32,11 +34,6 @@ namespace VoiceAssistant
             recogniseDictionary = builder.GetRecogniseDictionary;
             choicesList = builder.GetChoicesList;
             ls = ListenSettings.Load();
-
-            /*if (recogniseDictionary.ContainsKey("открой"))
-            {
-                recogniseDictionary["открой"].Recognised(new string[] { "открой", "новый", "блокнот" });
-            }*/
         }
 
         void Init()
@@ -46,41 +43,86 @@ namespace VoiceAssistant
 
         public void Start()
         {
-            StartListenAssistentName(ListenAssistentNameRecognised);
+            StartListenAssistentNameBase(AssistentNameRecognised);
         }
 
-        void ListenAssistentNameRecognised(object sender, SpeechRecognizedEventArgs e)
+        /*public void StartListenAssistentName(EventHandler<SpeechRecognizedEventArgs> onRecognise)
         {
-            
-            Debug.Log("Распознано имя " + e.Result.Text + ". Точность " + e.Result.Confidence);
+            StartListenAssistentNameBase(onRecognise);
+        }*/
+
+        void Recognised(object sender, SpeechRecognizedEventArgs e)
+        {
+            if (e.Result.Confidence < 0.85f)
+            {
+                return;
+            }
+
+            Debug.Log("Распознано " + e.Result.Text + ". Точность " + e.Result.Confidence);
+            StopCurrentListening();
+            onRecogniseCurrent(sender, e);
+
         }
 
-        void StartListenAssistentName(EventHandler<SpeechRecognizedEventArgs> onRecognise)
+        void StartListenAssistentNameBase(EventHandler<SpeechRecognizedEventArgs> onRecognise)
         {
-            /**System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("ru-Ru");
-            SpeechRecognitionEngine sre = new SpeechRecognitionEngine(ci);
-            sre.SetInputToDefaultAudioDevice();
-            GrammarBuilder gb = new GrammarBuilder();
-            gb.Culture = ci;
-
-            gb.Append(new Choices(new string[] { ls.assistentName }));
-
-            Grammar g = new Grammar(gb);
-
-            sre.LoadGrammar(g);
-
-            sre.SpeechRecognized += onRecognise;
-            sre.RecognizeAsync(RecognizeMode.Multiple);*/
-
             List<string[]> choses = new List<string[]>();
             choses.Add(new string[] {ls.assistentName });
+            onRecogniseCurrent = onRecognise;
 
-            SpeechRecognitionEngine sre = StartRecognise(choses, RecognizeMode.Multiple);
-            sre.SpeechRecognized += onRecognise;
+            SpeechRecognitionEngine sre = PrepareSpeechRecognition(choses);
+            sre.RecognizeAsync(RecognizeMode.Multiple);
+            sre.SpeechRecognized += Recognised;
+            sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("RecognizeCompleted");
+            current_sre = sre;
+
             Debug.Log("Ожидание вызова голосового ассистента");
         }
 
-        SpeechRecognitionEngine StartRecognise(List<string[]> choices, RecognizeMode recognizeMode)
+        void AssistentNameRecognised(object sender, SpeechRecognizedEventArgs e)
+        {
+            if (e.Result.Confidence < 0.85f)
+            {
+                return;
+            }
+
+            StopCurrentListening();
+            StartListedCommand(SendMessageToServices);
+        }
+
+        void StartListedCommand(EventHandler<SpeechRecognizedEventArgs> onRecognise)
+        {
+            List<string[]> choses = new List<string[]>();
+            onRecogniseCurrent = onRecognise;
+
+            for (int i = 0; i < choicesList.Count; i++)
+            {
+                choses.Add(choicesList[i].ToArray());
+            }
+
+            SpeechRecognitionEngine sre = PrepareSpeechRecognition(choses);
+            sre.RecognizeAsync(RecognizeMode.Multiple);
+            sre.SpeechRecognized += SendMessageToServices;
+            sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("RecognizeCompleted");
+            current_sre = sre;
+            
+            Debug.Log("Ожидание команды");
+        }
+
+        void SendMessageToServices(object sender, SpeechRecognizedEventArgs e)
+        {
+            string keyKommand = e.Result.Words.ElementAt(0).Text;
+            string[] commands = new string[e.Result.Words.Count];
+
+            for (int i = 0; i < e.Result.Words.Count; i++)
+            {
+                commands[i] = e.Result.Words.ElementAt(i).Text;
+            }
+
+            recogniseDictionary[keyKommand].Recognised(commands);
+        }
+
+        SpeechRecognitionEngine PrepareSpeechRecognition(List<string[]> choices)
         {
             System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("ru-Ru");
             SpeechRecognitionEngine sre = new SpeechRecognitionEngine(ci);
@@ -90,18 +132,18 @@ namespace VoiceAssistant
 
             for (int i = 0; i < choices.Count; i++)
             {
+                //Debug.Log("добавлена команда " + choices[i]);
                 gb.Append(new Choices(choices[i]));
             }
-            
 
             Grammar g = new Grammar(gb);
-
             sre.LoadGrammar(g);
-
-            //sre.SpeechRecognized += onRecognise;
-            sre.RecognizeAsync(RecognizeMode.Multiple);
-
             return sre;
+        }
+
+        void StopCurrentListening()
+        {
+            current_sre.RecognizeAsyncCancel();
         }
 
         public void Stop()

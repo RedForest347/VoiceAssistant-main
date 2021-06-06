@@ -22,7 +22,7 @@ namespace VoiceAssistant
 
         public override void OnRecognised(string[] recognisedWords)
         {
-            string _out = "распознаны слова:";
+            string _out = "сервис OpenFolderService. распознаны слова: ";
             for (int i = 0; i < recognisedWords.Length; i++)
             {
                 _out += recognisedWords[i] + ", ";
