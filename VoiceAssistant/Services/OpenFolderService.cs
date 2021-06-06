@@ -12,7 +12,7 @@ namespace VoiceAssistant
         List<string> secondWords = new List<string> {"блокнот", "книгу" };
         List<string> thirdWords = new List<string> {"сейчас", "через время" };
 
-        //возвращает набор слов в формате: [первые ключевые слова],[вторые ключевые слова]...[]
+        //набор слов в формате: [первые ключевые слова],[вторые ключевые слова]...
         public override ServiceData GetInitData()
         {
             List<List<string>> initData = new List<List<string>> { firstWords, secondWords, thirdWords };
@@ -20,7 +20,7 @@ namespace VoiceAssistant
             return new ServiceData(initData, this, GetType().Name);
         }
 
-        public override void OnRecognised(string[] recognisedWords)
+        public override void OnRecognised(string[] recognisedWords, ListenManager lm)
         {
             string _out = "сервис OpenFolderService. распознаны слова: ";
             for (int i = 0; i < recognisedWords.Length; i++)

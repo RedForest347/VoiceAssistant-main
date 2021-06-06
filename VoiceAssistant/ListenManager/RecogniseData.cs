@@ -9,7 +9,7 @@ namespace VoiceAssistant
 
     class RecogniseData
     {
-        public event Action<string[]> onRecognise;
+        public event Action<string[], ListenManager> onRecognise;
 
         public List<ServiceBase> services;
 
@@ -19,10 +19,10 @@ namespace VoiceAssistant
             services = new List<ServiceBase>();
         }
 
-        public void Recognised(string[] words)
+        public void Recognised(string[] words, ListenManager lm)
         {
             Debug.Log("Recognised " + (onRecognise == null));
-            onRecognise?.Invoke(words);
+            onRecognise?.Invoke(words, lm);
         }
     }
 }

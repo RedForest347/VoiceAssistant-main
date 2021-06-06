@@ -11,7 +11,7 @@ namespace VoiceAssistant
 
         ServiceData GetInitData();
 
-        void OnRecognised(string[] recognisedWords);
+        void OnRecognised(string[] recognisedWords, ListenManager lm);
 
         //void Init(ListenManager listenManager);
 

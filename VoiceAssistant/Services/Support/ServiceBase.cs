@@ -16,12 +16,7 @@ namespace VoiceAssistant
             return new ServiceData(initData, null, "empty");
         }
 
-        /*public virtual void Init(ListenManager listenManager)
-        {
-
-        }*/
-
-        public virtual void OnRecognised(string[] recognisedWords)
+        public virtual void OnRecognised(string[] recognisedWords, ListenManager lm)
         {
 
         }

@@ -119,7 +119,7 @@ namespace VoiceAssistant
                 commands[i] = e.Result.Words.ElementAt(i).Text;
             }
 
-            recogniseDictionary[keyKommand].Recognised(commands);
+            recogniseDictionary[keyKommand].Recognised(commands, this);
         }
 
         SpeechRecognitionEngine PrepareSpeechRecognition(List<string[]> choices)
