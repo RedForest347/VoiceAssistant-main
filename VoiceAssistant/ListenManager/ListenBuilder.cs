@@ -22,10 +22,9 @@ namespace VoiceAssistant
         public void Build()
         {
             Init();
-
             LoadAllServices();
 
-            DebugRecogniseDictionary();
+            //DebugRecogniseDictionary();
         }
 
         public void Init()

@@ -20,14 +20,9 @@ namespace VoiceAssistant
             return new ServiceData(initData, this, GetType().Name);
         }
 
-        public override void OnRecognised(string[] recognisedWords, ListenManager lm)
+        public override void OnRecognised(string[] recognisedWords)
         {
-            string _out = "сервис OpenFolderService. распознаны слова: ";
-            for (int i = 0; i < recognisedWords.Length; i++)
-            {
-                _out += recognisedWords[i] + ", ";
-            }
-            Debug.Log(_out);
+            ReturnControlToListenManager();
         }
 
         /*public override void Init(ListenManager listenManager)

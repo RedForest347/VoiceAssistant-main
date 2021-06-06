@@ -34,6 +34,18 @@ namespace VoiceAssistant
             recogniseDictionary = builder.GetRecogniseDictionary;
             choicesList = builder.GetChoicesList;
             ls = ListenSettings.Load();
+            InitServices();
+        }
+
+        void InitServices()
+        {
+            foreach (var elem in recogniseDictionary)
+            {
+                for (int i = 0; i < elem.Value.services.Count; i++)
+                {
+                    elem.Value.services[i].SetLM(this);
+                }
+            }
         }
 
         void Init()
@@ -58,7 +70,7 @@ namespace VoiceAssistant
                 return;
             }
 
-            Debug.Log("Распознано " + e.Result.Text + ". Точность " + e.Result.Confidence);
+            //Debug.Log("Распознано " + e.Result.Text + ". Точность " + e.Result.Confidence);
             StopCurrentListening();
             onRecogniseCurrent(sender, e);
 
@@ -86,7 +98,6 @@ namespace VoiceAssistant
                 return;
             }
 
-            StopCurrentListening();
             StartListedCommand(SendMessageToServices);
         }
 
@@ -102,7 +113,7 @@ namespace VoiceAssistant
 
             SpeechRecognitionEngine sre = PrepareSpeechRecognition(choses);
             sre.RecognizeAsync(RecognizeMode.Multiple);
-            sre.SpeechRecognized += SendMessageToServices;
+            sre.SpeechRecognized += Recognised;
             sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("RecognizeCompleted");
             current_sre = sre;
             
@@ -119,7 +130,7 @@ namespace VoiceAssistant
                 commands[i] = e.Result.Words.ElementAt(i).Text;
             }
 
-            recogniseDictionary[keyKommand].Recognised(commands, this);
+            recogniseDictionary[keyKommand].Recognised(commands);
         }
 
         SpeechRecognitionEngine PrepareSpeechRecognition(List<string[]> choices)
@@ -144,6 +155,12 @@ namespace VoiceAssistant
         void StopCurrentListening()
         {
             current_sre.RecognizeAsyncCancel();
+        }
+
+        public void ReturnControl()
+        {
+            Debug.Log("Сервис закончил свою работу. повторный запуск ListenManager");
+            StartListenAssistentNameBase(AssistentNameRecognised);
         }
 
         public void Stop()
