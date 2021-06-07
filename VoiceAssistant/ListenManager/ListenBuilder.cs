@@ -24,7 +24,7 @@ namespace VoiceAssistant
             Init();
             LoadAllServices();
 
-            //DebugRecogniseDictionary();
+            DebugRecogniseDictionary();
         }
 
         public void Init()

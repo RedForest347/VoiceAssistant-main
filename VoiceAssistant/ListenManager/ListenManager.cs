@@ -58,11 +58,6 @@ namespace VoiceAssistant
             StartListenAssistentNameBase(AssistentNameRecognised);
         }
 
-        /*public void StartListenAssistentName(EventHandler<SpeechRecognizedEventArgs> onRecognise)
-        {
-            StartListenAssistentNameBase(onRecognise);
-        }*/
-
         void Recognised(object sender, SpeechRecognizedEventArgs e)
         {
             if (e.Result.Confidence < 0.85f)
@@ -76,21 +71,6 @@ namespace VoiceAssistant
 
         }
 
-        void StartListenAssistentNameBase(EventHandler<SpeechRecognizedEventArgs> onRecognise)
-        {
-            List<string[]> choses = new List<string[]>();
-            choses.Add(new string[] {ls.assistentName });
-            onRecogniseCurrent = onRecognise;
-
-            SpeechRecognitionEngine sre = PrepareSpeechRecognition(choses);
-            sre.RecognizeAsync(RecognizeMode.Multiple);
-            sre.SpeechRecognized += Recognised;
-            sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("RecognizeCompleted");
-            current_sre = sre;
-
-            Debug.Log("Ожидание вызова голосового ассистента");
-        }
-
         void AssistentNameRecognised(object sender, SpeechRecognizedEventArgs e)
         {
             if (e.Result.Confidence < 0.85f)
@@ -98,26 +78,7 @@ namespace VoiceAssistant
                 return;
             }
 
-            StartListedCommand(SendMessageToServices);
-        }
-
-        void StartListedCommand(EventHandler<SpeechRecognizedEventArgs> onRecognise)
-        {
-            List<string[]> choses = new List<string[]>();
-            onRecogniseCurrent = onRecognise;
-
-            for (int i = 0; i < choicesList.Count; i++)
-            {
-                choses.Add(choicesList[i].ToArray());
-            }
-
-            SpeechRecognitionEngine sre = PrepareSpeechRecognition(choses);
-            sre.RecognizeAsync(RecognizeMode.Multiple);
-            sre.SpeechRecognized += Recognised;
-            sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("RecognizeCompleted");
-            current_sre = sre;
-            
-            Debug.Log("Ожидание команды");
+            StartListedCommandBase(SendMessageToServices);
         }
 
         void SendMessageToServices(object sender, SpeechRecognizedEventArgs e)
@@ -143,7 +104,6 @@ namespace VoiceAssistant
 
             for (int i = 0; i < choices.Count; i++)
             {
-                //Debug.Log("добавлена команда " + choices[i]);
                 gb.Append(new Choices(choices[i]));
             }
 
@@ -167,6 +127,79 @@ namespace VoiceAssistant
         {
 
         }
+
+
+        #region Start Listen
+
+
+        public void StartListenAssistentName(EventHandler<SpeechRecognizedEventArgs> onRecognise)
+        {
+            StartListenAssistentNameBase(onRecognise);
+        }
+
+        void StartListenAssistentNameBase(EventHandler<SpeechRecognizedEventArgs> onRecognise)
+        {
+            List<string[]> choses = new List<string[]>();
+            choses.Add(new string[] { ls.assistentName });
+            onRecogniseCurrent = onRecognise;
+
+            SpeechRecognitionEngine sre = PrepareSpeechRecognition(choses);
+            sre.RecognizeAsync(RecognizeMode.Multiple);
+            sre.SpeechRecognized += Recognised;
+            sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("RecognizeCompleted");
+            current_sre = sre;
+
+            Debug.Log("Ожидание вызова голосового ассистента");
+        }
+
+        public void StartListedCommand(EventHandler<SpeechRecognizedEventArgs> onRecognise)
+        {
+            StartListedCommandBase(onRecognise);
+        }
+
+        void StartListedCommandBase(EventHandler<SpeechRecognizedEventArgs> onRecognise)
+        {
+            List<string[]> choses = new List<string[]>();
+            onRecogniseCurrent = onRecognise;
+
+            for (int i = 0; i < choicesList.Count; i++)
+            {
+                choses.Add(choicesList[i].ToArray());
+            }
+
+            SpeechRecognitionEngine sre = PrepareSpeechRecognition(choses);
+            sre.RecognizeAsync(RecognizeMode.Multiple);
+            sre.SpeechRecognized += Recognised;
+            sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("RecognizeCompleted");
+            current_sre = sre;
+
+            Debug.Log("Ожидание команды");
+        }
+
+        public void StartListenCustom(EventHandler<SpeechRecognizedEventArgs> onRecognise, List<string[]> choses)
+        {
+            StartListenCustomBase(onRecognise, choses);
+        }
+
+        void StartListenCustomBase(EventHandler<SpeechRecognizedEventArgs> onRecognise, List<string[]> choses)
+        {
+            onRecogniseCurrent = onRecognise;
+
+            SpeechRecognitionEngine sre = PrepareSpeechRecognition(choses);
+            sre.RecognizeAsync(RecognizeMode.Multiple);
+            sre.SpeechRecognized += Recognised;
+            sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("RecognizeCompleted");
+            current_sre = sre;
+
+            Debug.Log("Ожидание команды");
+        }
+
+
+
+
+        #endregion Start Listen
+
+
 
         private class ListenSettings
         {
@@ -195,7 +228,7 @@ namespace VoiceAssistant
             {
                 StreamReader sr = new StreamReader(filePath);
                 string json = sr.ReadToEndAsync().Result;
-
+                //Debug.Log("json ls = " + json);
                 ListenSettings ls;
                 try
                 {
