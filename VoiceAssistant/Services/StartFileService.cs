@@ -19,7 +19,6 @@ namespace VoiceAssistant
         //набор слов в формате: [первые ключевые слова],[вторые ключевые слова]...
         public override ServiceData GetInitData()
         {
-            //OpenFileData.Save(new List<OpenFileData>() {new OpenFileData(), new OpenFileData() });
             InitCommandDictionary();
             secondWords = GetCommandList();
             List<List<string>> initData = new List<List<string>> { firstWords, secondWords };
@@ -63,7 +62,7 @@ namespace VoiceAssistant
 
             if (filePath.EndsWith(".bat"))
             {
-                OpenBatFile(filePath);
+                BatFileOpen(filePath);
             }
             else
             {
@@ -74,31 +73,61 @@ namespace VoiceAssistant
 
         void StandartOpen(string filePath)
         {
-            OpenWithArguments(filePath);
-            //Process.Start(filePath);
+            if (PathExtension.FilePathContainArguments(filePath))
+            {
+                OpenFileWithArguments(filePath);
+            }
+            else
+            {
+                OpenFile(filePath);
+            }
         }
 
 
 
-        void OpenBatFile(string filePath)
+        void BatFileOpen(string filePath)
+        {
+            if (PathExtension.FilePathContainArguments(filePath))
+            {
+                OpenBatFileWithArguments(filePath);
+            }
+            else
+            {
+                OpenBatFileWithoutArguments(filePath);
+            }
+        }
+
+        void OpenBatFileWithArguments(string filePath)
+        {
+            string filePathWithoutArguments = PathExtension.GetFilePathWithoutArguments(filePath);
+            string arguments = PathExtension.GetArguments(filePath);
+
+            Process proc = new Process();
+            proc.StartInfo.FileName = Path.GetFileName(filePathWithoutArguments);
+            proc.StartInfo.WorkingDirectory = Path.GetDirectoryName(filePathWithoutArguments);
+            proc.StartInfo.Arguments = arguments;
+
+            proc.Start();
+        }
+
+        void OpenBatFileWithoutArguments(string filePath)
         {
             Process proc = new Process();
             proc.StartInfo.FileName = Path.GetFileName(filePath);
             proc.StartInfo.WorkingDirectory = Path.GetDirectoryName(filePath);
+
             proc.Start();
         }
 
-        bool ContainParams()
+        void OpenFile(string filePath)
         {
-            return false; ///
+            Process.Start(filePath);
         }
 
-        void OpenWithArguments(string filePathWithArguments)
+        void OpenFileWithArguments(string filePathWithArguments)
         {
-            //Enumerable.ToArray
-            string filePath = filePathWithArguments.Split(new char[] { ' ' })[0];
-            string fileArguments = filePathWithArguments.Remove(0, filePath.Length);
-            //Debug.Log("filePath =" + filePath + " fileParams =" + fileParams + ".");
+            string filePath = PathExtension.GetFilePathWithoutArguments(filePathWithArguments);
+            string fileArguments = PathExtension.GetArguments(filePathWithArguments);
 
             ProcessStartInfo info = new ProcessStartInfo(filePath);
             info.Arguments = fileArguments;

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Speech.Recognition;
 using Newtonsoft.Json;
+using VoiceAssistant.Handles;
 
 namespace VoiceAssistant
 {
@@ -55,7 +56,7 @@ namespace VoiceAssistant
 
         public void Start()
         {
-            StartListenAssistentNameBase(AssistentNameRecognised);
+            StartListenAssistentNameInternal(AssistentNameRecognised);
         }
 
         void Recognised(object sender, SpeechRecognizedEventArgs e)
@@ -78,7 +79,7 @@ namespace VoiceAssistant
                 return;
             }
 
-            StartListedCommandBase(SendMessageToServices);
+            StartListedCommandInternal(SendMessageToServices);
         }
 
         void SendMessageToServices(object sender, SpeechRecognizedEventArgs e)
@@ -120,7 +121,7 @@ namespace VoiceAssistant
         public void ReturnControl()
         {
             Debug.Log("Сервис закончил свою работу. повторный запуск ListenManager");
-            StartListenAssistentNameBase(AssistentNameRecognised);
+            StartListenAssistentNameInternal(AssistentNameRecognised);
         }
 
         public void Stop()
@@ -134,10 +135,10 @@ namespace VoiceAssistant
 
         public void StartListenAssistentName(EventHandler<SpeechRecognizedEventArgs> onRecognise)
         {
-            StartListenAssistentNameBase(onRecognise);
+            StartListenAssistentNameInternal(onRecognise);
         }
 
-        void StartListenAssistentNameBase(EventHandler<SpeechRecognizedEventArgs> onRecognise)
+        void StartListenAssistentNameInternal(EventHandler<SpeechRecognizedEventArgs> onRecognise)
         {
             List<string[]> choses = new List<string[]>();
             choses.Add(new string[] { ls.assistentName });
@@ -154,10 +155,10 @@ namespace VoiceAssistant
 
         public void StartListedCommand(EventHandler<SpeechRecognizedEventArgs> onRecognise)
         {
-            StartListedCommandBase(onRecognise);
+            StartListedCommandInternal(onRecognise);
         }
 
-        void StartListedCommandBase(EventHandler<SpeechRecognizedEventArgs> onRecognise)
+        void StartListedCommandInternal(EventHandler<SpeechRecognizedEventArgs> onRecognise)
         {
             List<string[]> choses = new List<string[]>();
             onRecogniseCurrent = onRecognise;
@@ -213,7 +214,7 @@ namespace VoiceAssistant
             [JsonProperty("Имя пользователя")]
             public string userName { get; set; }
 
-            private ListenSettings()
+            public ListenSettings()
             {
                 assistentName = "Алиса";
                 userName = "Рэд";
@@ -226,7 +227,15 @@ namespace VoiceAssistant
 
             public static ListenSettings Load()
             {
-                StreamReader sr = new StreamReader(filePath);
+
+                
+                ListenSettings ls = FileHandler.LoadFromFile<ListenSettings>(filePath);
+
+                Debug.Log("Параметры голосового ассистента загружены. имя = " + ls.assistentName + " имя пользователя = " + ls.userName);
+
+                return ls;
+
+                /**StreamReader sr = new StreamReader(filePath);
                 string json = sr.ReadToEndAsync().Result;
                 //Debug.Log("json ls = " + json);
                 ListenSettings ls;
@@ -239,21 +248,24 @@ namespace VoiceAssistant
                     ls = new ListenSettings();
                     Debug.Log("Файл поврежден или содержит некорректные данные");
                 }
-
                 sr.Close();
-                return ls;
+                */
+
+
             }
 
             public static void Save(ListenSettings settings)
             {
-                
-                FileStream fstream = new FileStream(filePath, FileMode.OpenOrCreate);
+
+                FileHandler.SaveToFile(filePath, settings);
+                Debug.Log("настройки успешно сохранены");
+                /**FileStream fstream = new FileStream(filePath, FileMode.OpenOrCreate);
 
                 string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
 
                 fstream.Write(Encoding.Default.GetBytes(json), 0, json.Length);
-                fstream.Close();
-                Debug.Log("настройки успешно сохранены");
+                fstream.Close();*/
+
             }
 
 

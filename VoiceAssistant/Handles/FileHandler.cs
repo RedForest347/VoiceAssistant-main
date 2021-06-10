@@ -14,7 +14,6 @@ namespace VoiceAssistant.Handles
         public static void SaveToFile<T>(string filePath, T data)
         {
             FileStream fstream = new FileStream(filePath, FileMode.Create);
-            //File.WriteAllText(path, String.Empty);
             string json = JsonConvert.SerializeObject(data, Formatting.Indented);
 
             fstream.Write(Encoding.Default.GetBytes(json), 0, json.Length);
@@ -38,6 +37,11 @@ namespace VoiceAssistant.Handles
             {
                 folderData = new T();
                 Debug.LogError("Файл " + filePath + " поврежден или содержит некорректные данные");
+            }
+            catch(Exception e)
+            {
+                folderData = new T();
+                Debug.LogError(e.Message);
             }
 
             fstream.Close();

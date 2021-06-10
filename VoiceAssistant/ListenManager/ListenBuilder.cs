@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VoiceAssistant
 {
@@ -24,7 +22,7 @@ namespace VoiceAssistant
             Init();
             LoadAllServices();
 
-            DebugRecogniseDictionary();
+            //DebugRecogniseDictionary();
         }
 
         public void Init()
@@ -118,13 +116,13 @@ namespace VoiceAssistant
             Debug.Log("-----------Список всех команд-----------");
             for (int i = 0; i < choicesList.Count; i++)
             {
-                Debug.Log("------------------------------------------");
+                
                 for (int j = 0; j < choicesList[i].Count; j++)
                 {
                     Debug.Log("    " + (i + 1) + "." + (j + 1) + ") = " + choicesList[i][j]);
                 }
+                Debug.Log("------------------------------------------");
             }
-            Debug.Log("------------------------------------------");
         }
     }
 }
