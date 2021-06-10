@@ -21,7 +21,6 @@ namespace VoiceAssistant
 
         public void Recognised(string[] words)
         {
-            //Debug.Log("Recognised " + (onRecognise == null));
             onRecognise?.Invoke(words);
         }
     }
