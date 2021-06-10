@@ -36,6 +36,7 @@ namespace VoiceAssistant
         void LoadAllServices()
         {
             LoadService(new OpenFolderService());
+            LoadService(new StartFileService());
         }
 
         void LoadService(ServiceBase service)
@@ -114,6 +115,7 @@ namespace VoiceAssistant
 
         void DebugRecogniseDictionary()
         {
+            Debug.Log("-----------Список всех команд-----------");
             for (int i = 0; i < choicesList.Count; i++)
             {
                 Debug.Log("------------------------------------------");

@@ -65,7 +65,7 @@ namespace VoiceAssistant
                 return;
             }
 
-            //Debug.Log("Распознано " + e.Result.Text + ". Точность " + e.Result.Confidence);
+            Debug.Log("Распознано \"" + e.Result.Text + "\". Точность " + e.Result.Confidence);
             StopCurrentListening();
             onRecogniseCurrent(sender, e);
 

@@ -1,23 +1,25 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using VoiceAssistant.Handles;
 
 namespace VoiceAssistant
 {
-    class OpenFolderService : ServiceBase
+    class StartFileService : ServiceBase
     {
-        List<string> firstWords = new List<string> {"открой"};
+        List<string> firstWords = new List<string> { "запусти" };
         List<string> secondWords;
         Dictionary<string, string> commandDictionary;
 
         //набор слов в формате: [первые ключевые слова],[вторые ключевые слова]...
         public override ServiceData GetInitData()
         {
+            //OpenFileData.Save(new List<OpenFileData>() {new OpenFileData(), new OpenFileData() });
             InitCommandDictionary();
             secondWords = GetCommandList();
             List<List<string>> initData = new List<List<string>> { firstWords, secondWords };
@@ -33,7 +35,7 @@ namespace VoiceAssistant
 
         void InitCommandDictionary()
         {
-            List<OpenFolderData> folderData = OpenFolderData.Load();
+            List<OpenFileData> folderData = OpenFileData.Load();
             commandDictionary = new Dictionary<string, string>();
 
             for (int i = 0; i < folderData.Count; i++)
@@ -59,8 +61,51 @@ namespace VoiceAssistant
 
             string filePath = commandDictionary[command];
 
-            System.Diagnostics.Process.Start(filePath);
+            if (filePath.EndsWith(".bat"))
+            {
+                OpenBatFile(filePath);
+            }
+            else
+            {
+                StandartOpen(filePath);
+            }
+
         }
+
+        void StandartOpen(string filePath)
+        {
+            OpenWithArguments(filePath);
+            //Process.Start(filePath);
+        }
+
+
+
+        void OpenBatFile(string filePath)
+        {
+            Process proc = new Process();
+            proc.StartInfo.FileName = Path.GetFileName(filePath);
+            proc.StartInfo.WorkingDirectory = Path.GetDirectoryName(filePath);
+            proc.Start();
+        }
+
+        bool ContainParams()
+        {
+            return false; ///
+        }
+
+        void OpenWithArguments(string filePathWithArguments)
+        {
+            //Enumerable.ToArray
+            string filePath = filePathWithArguments.Split(new char[] { ' ' })[0];
+            string fileArguments = filePathWithArguments.Remove(0, filePath.Length);
+            //Debug.Log("filePath =" + filePath + " fileParams =" + fileParams + ".");
+
+            ProcessStartInfo info = new ProcessStartInfo(filePath);
+            info.Arguments = fileArguments;
+            Process.Start(info);
+        }
+
+
 
         string ConvertToCommand(string[] text)
         {
@@ -76,33 +121,32 @@ namespace VoiceAssistant
 
 
 
-        private class OpenFolderData
+        private class OpenFileData
         {
             [JsonIgnore]
-            static string filePath = @"data\foldersData.swmodel";
+            static string filePath = @"data\openFileData.swmodel";
 
             [JsonProperty("Имя команды"), JsonRequired]
             public string commandName { get; set; }
 
-            [JsonProperty("Имя папки"), JsonRequired]
+            [JsonProperty("Имя файла"), JsonRequired]
             public string folderPath { get; set; }
 
-            public OpenFolderData()
+            public OpenFileData()
             {
                 commandName = "мой компьютер";
                 folderPath = "explorer";
             }
 
-            public static void Save(List<OpenFolderData> folderData)
+            public static void Save(List<OpenFileData> folderData)
             {
                 FileHandler.SaveToFile(filePath, folderData);
             }
 
-            public static List<OpenFolderData> Load()
+            public static List<OpenFileData> Load()
             {
-                return FileHandler.LoadFromFile<List<OpenFolderData>>(filePath);
+                return FileHandler.LoadFromFile<List<OpenFileData>>(filePath);
             }
         }
-
     }
 }

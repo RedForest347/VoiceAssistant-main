@@ -93,15 +93,18 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="GrammarTest.cs" />
+    <Compile Include="Handles\PathExtension.cs" />
     <Compile Include="ListenManager\ListenBuilder.cs" />
     <Compile Include="ListenManager\ListenManager.cs" />
     <Compile Include="ListenManager\RecogniseData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\StartFileService.cs" />
     <Compile Include="Services\Support\IService.cs" />
     <Compile Include="Services\OpenFolderService.cs" />
     <Compile Include="Services\Support\ServiceBase.cs" />
     <Compile Include="Services\Support\ServiceData.cs" />
+    <Compile Include="Handles\FileHandler.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

@@ -16,6 +16,11 @@ namespace VoiceAssistant
             form1.WriteMassage("[WARNING] " + message);
         }
 
+        public static void LogError(string message)
+        {
+            form1.WriteMassage("[ERROR] " + message);
+        }
+
         public static void SetMaxValueProgressBar(int value)
         {
             form1.ProgressMaxValue(value);
