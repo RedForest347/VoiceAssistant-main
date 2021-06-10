@@ -1,0 +1,38 @@
+[
+  {
+    "Имя команды": "мой компьютер",
+    "Имя папки": "explorer"
+  },
+  {
+    "Имя команды": "браузер",
+    "Имя папки": "https://yandex.ru/"
+  },
+  {
+    "Имя команды": "контакт",
+    "Имя папки": "https://vk.com/feed"
+  },
+  {
+    "Имя команды": "майнкрафт сервер",
+    "Имя папки": "C:\\Users\\Admin\\Desktop\\игры\\Server"
+  },
+  {
+    "Имя команды": "защита",
+    "Имя папки": "D:\\учеба\\ВКР\\защита"
+  },
+  {
+    "Имя команды": "проект",
+    "Имя папки": "D:\\indi projects\\VoiceAssistentProj\\VoiceAssistant main"
+  },
+  {
+    "Имя команды": "проект дату",
+    "Имя папки": "D:\\indi projects\\VoiceAssistentProj\\VoiceAssistant main\\VoiceAssistant\\bin\\Debug\\data"
+  },
+  {
+    "Имя команды": "проджект дату",
+    "Имя папки": "D:\\indi projects\\VoiceAssistentProj\\VoiceAssistant main\\VoiceAssistant\\bin\\Debug\\data"
+  },
+  {
+    "Имя команды": "прожэкт дату",
+    "Имя папки": "D:\\indi projects\\VoiceAssistentProj\\VoiceAssistant main\\VoiceAssistant\\bin\\Debug\\data"
+  }
+]

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VoiceAssistant
 {
@@ -22,10 +20,9 @@ namespace VoiceAssistant
         public void Build()
         {
             Init();
-
             LoadAllServices();
 
-            DebugRecogniseDictionary();
+            //DebugRecogniseDictionary();
         }
 
         public void Init()
@@ -37,6 +34,7 @@ namespace VoiceAssistant
         void LoadAllServices()
         {
             LoadService(new OpenFolderService());
+            LoadService(new StartFileService());
         }
 
         void LoadService(ServiceBase service)
@@ -81,8 +79,6 @@ namespace VoiceAssistant
                     }
                 }
             }
-
-
         }
 
         //добавляет необходимые уровни ключевых слов
@@ -117,24 +113,16 @@ namespace VoiceAssistant
 
         void DebugRecogniseDictionary()
         {
-            //Debug.LogWarning("Start DebugRecogniseDictionary");
-
+            Debug.Log("-----------Список всех команд-----------");
             for (int i = 0; i < choicesList.Count; i++)
             {
-                Debug.Log("------------------------------------------");
+                
                 for (int j = 0; j < choicesList[i].Count; j++)
                 {
                     Debug.Log("    " + (i + 1) + "." + (j + 1) + ") = " + choicesList[i][j]);
                 }
+                Debug.Log("------------------------------------------");
             }
-            Debug.Log("------------------------------------------");
-
-            /*if (recogniseDictionary.ContainsKey("открой"))
-            {
-                recogniseDictionary["открой"].Recognised(new string[] { "открой", "новый", "блокнот" });
-            }*/
-
-            //Debug.LogWarning("End DebugRecogniseDictionary");
         }
     }
 }

@@ -8,6 +8,12 @@ namespace VoiceAssistant
 {
     class ServiceBase : IService
     {
+        protected ListenManager lm;
+
+        public void SetLM(ListenManager lm)
+        {
+            this.lm = lm;
+        }
 
         public virtual ServiceData GetInitData()
         {
@@ -16,14 +22,14 @@ namespace VoiceAssistant
             return new ServiceData(initData, null, "empty");
         }
 
-        /*public virtual void Init(ListenManager listenManager)
-        {
-
-        }*/
-
         public virtual void OnRecognised(string[] recognisedWords)
         {
 
+        }
+
+        protected virtual void ReturnControlToListenManager()
+        {
+            lm.ReturnControl();
         }
     }
 }
