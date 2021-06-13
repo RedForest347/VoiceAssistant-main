@@ -26,6 +26,7 @@ namespace VoiceAssistant
         List<List<string>> choicesList;
         ListenSettings ls;
 
+        float requaredConfidence = 0.85f;
         SpeechRecognitionEngine current_sre;
         EventHandler<SpeechRecognizedEventArgs> onRecogniseCurrent;
 
@@ -61,8 +62,9 @@ namespace VoiceAssistant
 
         void Recognised(object sender, SpeechRecognizedEventArgs e)
         {
-            if (e.Result.Confidence < 0.85f)
+            if (e.Result.Confidence < requaredConfidence)
             {
+                Debug.Log("не распознано \"" + e.Result.Text + "\". Точность " + e.Result.Confidence);
                 return;
             }
 
@@ -74,7 +76,7 @@ namespace VoiceAssistant
 
         void AssistentNameRecognised(object sender, SpeechRecognizedEventArgs e)
         {
-            if (e.Result.Confidence < 0.85f)
+            if (e.Result.Confidence < requaredConfidence)
             {
                 return;
             }
@@ -90,6 +92,12 @@ namespace VoiceAssistant
             for (int i = 0; i < e.Result.Words.Count; i++)
             {
                 commands[i] = e.Result.Words.ElementAt(i).Text;
+            }
+
+            if (!recogniseDictionary.ContainsKey(keyKommand))
+            {
+                Debug.LogError("ключ " + keyKommand + " отсутствует в словаре");
+                return;
             }
 
             recogniseDictionary[keyKommand].Recognised(commands);
