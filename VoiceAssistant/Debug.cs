@@ -21,11 +21,6 @@ namespace VoiceAssistant
             form1.WriteMassage("[ERROR] " + message);
         }
 
-        public static void PlusProgressBar(int value)
-        {
-
-        }
-
         public static void ClearLog()
         {
             form1.ClearLog();

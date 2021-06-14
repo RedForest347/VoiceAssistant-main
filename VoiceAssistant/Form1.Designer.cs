@@ -41,7 +41,8 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.AutoScroll = true;
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -49,7 +50,7 @@
             this.panel1.Controls.Add(this.MessageForm);
             this.panel1.Location = new System.Drawing.Point(312, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(769, 561);
+            this.panel1.Size = new System.Drawing.Size(410, 449);
             this.panel1.TabIndex = 1;
             // 
             // MessageForm
@@ -66,9 +67,9 @@
             // 
             // ClearLogButton
             // 
-            this.ClearLogButton.Location = new System.Drawing.Point(2, 107);
+            this.ClearLogButton.Location = new System.Drawing.Point(3, 107);
             this.ClearLogButton.Name = "ClearLogButton";
-            this.ClearLogButton.Size = new System.Drawing.Size(290, 51);
+            this.ClearLogButton.Size = new System.Drawing.Size(286, 51);
             this.ClearLogButton.TabIndex = 1;
             this.ClearLogButton.Text = "Cleal Log";
             this.ClearLogButton.UseVisualStyleBackColor = true;
@@ -77,7 +78,7 @@
             // label1
             // 
             this.label1.BackColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(3, 57);
+            this.label1.Location = new System.Drawing.Point(5, 57);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(136, 44);
             this.label1.TabIndex = 8;
@@ -86,22 +87,22 @@
             // 
             // ConfidenceBox
             // 
-            this.ConfidenceBox.Location = new System.Drawing.Point(145, 57);
+            this.ConfidenceBox.Location = new System.Drawing.Point(145, 56);
             this.ConfidenceBox.Multiline = true;
             this.ConfidenceBox.Name = "ConfidenceBox";
-            this.ConfidenceBox.Size = new System.Drawing.Size(144, 44);
+            this.ConfidenceBox.Size = new System.Drawing.Size(144, 45);
             this.ConfidenceBox.TabIndex = 9;
             this.ConfidenceBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ConfidenceBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ConfidenceBox_KeyDown);
             // 
             // panel2
             // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.panel2.Controls.Add(this.RecogniseButton);
             this.panel2.Controls.Add(this.ClearLogButton);
             this.panel2.Controls.Add(this.ConfidenceBox);
             this.panel2.Controls.Add(this.label1);
-            this.panel2.Location = new System.Drawing.Point(13, 410);
+            this.panel2.Location = new System.Drawing.Point(13, 298);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(293, 163);
             this.panel2.TabIndex = 10;
@@ -121,12 +122,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
-            this.ClientSize = new System.Drawing.Size(1093, 585);
+            this.ClientSize = new System.Drawing.Size(734, 473);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
+            this.MinimumSize = new System.Drawing.Size(750, 230);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

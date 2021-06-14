@@ -5,7 +5,7 @@ namespace VoiceAssistant
 {
     public partial class Form1 : Form
     {
-        public static event Action<float> OnConfidenceChanged;
+        public event Action<float> OnConfidenceChanged;
 
         public Form1()
         {

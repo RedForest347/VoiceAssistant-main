@@ -42,7 +42,7 @@ namespace VoiceAssistant
 
         void Init()
         {
-            Form1.OnConfidenceChanged += ChangeConfidence;
+            Debug.form1.OnConfidenceChanged += ChangeConfidence;
         }
 
         void InitServices()
