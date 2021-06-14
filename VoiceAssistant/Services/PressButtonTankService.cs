@@ -95,10 +95,6 @@ namespace VoiceAssistant
         void OnRecogniseCustomCommand(object sender, Microsoft.Speech.Recognition.SpeechRecognizedEventArgs e)
         {
             string command = e.Result.Text;
-            if (!commandDictionary.ContainsKey(command))
-            {
-                Debug.Log("команда " + command + " распознана. Этот сервис " + (commandDictionary.ContainsKey(command) ? "" : "не ") + "содержит эту команду");
-            }
 
             if (command == "закрыть сервис")
             {
@@ -109,6 +105,7 @@ namespace VoiceAssistant
 
             if (!commandDictionary.ContainsKey(command))
             {
+                Debug.Log("команда " + command + " распознана. Этот сервис " + (commandDictionary.ContainsKey(command) ? "" : "не ") + "содержит эту команду");
                 return;
             }
 

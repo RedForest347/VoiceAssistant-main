@@ -9,14 +9,31 @@ namespace VoiceAssistant.Handles
 {
     public class Keyboard
     {
-        public static void Send(ScanCodeShort a)
+        public static void SendPress(ScanCodeShort a)
         {
             INPUT[] Inputs = new INPUT[1];
-            INPUT Input = new INPUT();
-            Input.type = 1; // 1 = Keyboard Input
-            Input.U.ki.wScan = a;
-            Input.U.ki.dwFlags = KEYEVENTF.SCANCODE;
-            Inputs[0] = Input;
+
+            //---------------PRESS---------------
+            INPUT Input0 = new INPUT();
+            Input0.type = 1; // 1 = Keyboard Input
+            Input0.U.ki.wScan = a;
+            Input0.U.ki.dwFlags = KEYEVENTF.SCANCODE;
+            Inputs[0] = Input0;
+
+            SendInput(1, Inputs, INPUT.Size);
+        }
+
+        public static void SendUnpress(ScanCodeShort a)
+        {
+            INPUT[] Inputs = new INPUT[1];
+
+            //-------------UNPRESS---------------
+            INPUT Input1 = new INPUT();
+            Input1.type = 1; // 1 = Keyboard Input
+            Input1.U.ki.wScan = a;
+            Input1.U.ki.dwFlags = KEYEVENTF.KEYUP;
+            Inputs[0] = Input1;
+
             SendInput(1, Inputs, INPUT.Size);
         }
 

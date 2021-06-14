@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static VoiceAssistant.Handles.Keyboard;
 
@@ -9,12 +10,18 @@ namespace VoiceAssistant.Handles
 {
     class PressKeyHandles
     {
+        static int sleepTime = 20;
         public static void PressKey(string button)
         {
             ScanCodeShort scanCodeShort = GetScanCodeShort(button);
-            Keyboard.Send(scanCodeShort);
-        }
+            Keyboard.SendPress(scanCodeShort);
+            Thread.Sleep(sleepTime);
+            Keyboard.SendUnpress(scanCodeShort);
 
+            //Debug.Log(DateTime.Now.Second +  " " + DateTime.Now.Millisecond);
+            //new Timer(Keyboard.SendUnpress, null, 1000, Timeout.Infinite);
+            //Form1.Invoke(() => Keyboard.SendUnpress(scanCodeShort), 200);
+        }
 
         public static ScanCodeShort GetScanCodeShort(string key)
         {
@@ -35,8 +42,6 @@ namespace VoiceAssistant.Handles
 
         public static Dictionary<string, ScanCodeShort> CreateKeyDictionary()
         {
-            //(\w +) = (\d +),
-
             Dictionary<string, ScanCodeShort> keyDictionary = new Dictionary<string, ScanCodeShort>
             {
                 { "LBUTTON", (ScanCodeShort)0 },
@@ -117,6 +122,38 @@ namespace VoiceAssistant.Handles
                 { "X", (ScanCodeShort)45 },
                 { "Y", (ScanCodeShort)21 },
                 { "Z", (ScanCodeShort)44 },
+                { "А", (ScanCodeShort)33 },
+                { "Б", (ScanCodeShort)51 },
+                { "В", (ScanCodeShort)32 },
+                { "Г", (ScanCodeShort)22 },
+                { "Д", (ScanCodeShort)38 },
+                { "Е", (ScanCodeShort)20 },
+                { "Ж", (ScanCodeShort)39 },
+                { "З", (ScanCodeShort)25 },
+                { "И", (ScanCodeShort)48 },
+                { "Й", (ScanCodeShort)16 },
+                { "К", (ScanCodeShort)19 },
+                { "Л", (ScanCodeShort)37 },
+                { "М", (ScanCodeShort)47 },
+                { "Н", (ScanCodeShort)21 },
+                { "О", (ScanCodeShort)36 },
+                { "П", (ScanCodeShort)34 },
+                { "Р", (ScanCodeShort)35 },
+                { "С", (ScanCodeShort)46 },
+                { "Т", (ScanCodeShort)49 },
+                { "У", (ScanCodeShort)18 },
+                { "Х", (ScanCodeShort)26 },
+                { "Ф", (ScanCodeShort)30 },
+                { "Ц", (ScanCodeShort)17 },
+                { "Ч", (ScanCodeShort)45 },
+                { "Ш", (ScanCodeShort)23 },
+                { "Щ", (ScanCodeShort)24 },
+                { "Ь", (ScanCodeShort)50 },
+                { "Ы", (ScanCodeShort)31 },
+                { "Ъ", (ScanCodeShort)27 },
+                { "Э", (ScanCodeShort)40 },
+                { "Ю", (ScanCodeShort)52 },
+                { "Я", (ScanCodeShort)44 },
                 { "LWIN", (ScanCodeShort)91 },
                 { "RWIN", (ScanCodeShort)92 },
                 { "APPS", (ScanCodeShort)93 },
