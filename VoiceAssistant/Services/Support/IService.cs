@@ -8,12 +8,9 @@ namespace VoiceAssistant
 {
     interface IService
     {
-
         ServiceData GetInitData();
 
         void OnRecognised(string[] recognisedWords);
-
-        //void Init(ListenManager listenManager);
 
     }
 }

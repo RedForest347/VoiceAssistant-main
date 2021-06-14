@@ -2,13 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VoiceAssistant.Handles;
 
 namespace VoiceAssistant
 {
-    class PressButtonTankService : ServiceBase
+    class PressButtonService : ServiceBase
     {
         List<string> firstWords = new List<string>() { "танки", "старбаунд", "самолеты" };
         List<string> secondWords = new List<string>() { " " };
@@ -164,7 +162,7 @@ namespace VoiceAssistant
 
             public PressButtonData()
             {
-                commandName = "мой компьютер";
+                commandName = "что то";
                 buttonString = "D";
             }
 
