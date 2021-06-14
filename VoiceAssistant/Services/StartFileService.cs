@@ -28,7 +28,7 @@ namespace VoiceAssistant
 
         public override void OnRecognised(string[] recognisedWords)
         {
-            DoOpenFolder(recognisedWords);
+            DoOpenFile(recognisedWords);
             ReturnControlToListenManager();
         }
 
@@ -48,7 +48,7 @@ namespace VoiceAssistant
             return commandDictionary.Keys.ToList();
         }
 
-        void DoOpenFolder(string[] recognisedWords)
+        void DoOpenFile(string[] recognisedWords)
         {
             string command = ConvertToCommand(recognisedWords);
 
@@ -57,7 +57,9 @@ namespace VoiceAssistant
                 Debug.LogError("Сервис " + GetType() + " не содержит команды " + command);
                 return;
             }
+            System.Collections.Generic.List<int> ddd = new System.Collections.Generic.List<int>();
 
+            ddd[7] = 3;
             string filePath = commandDictionary[command];
 
             if (filePath.EndsWith(".bat"))
