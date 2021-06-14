@@ -46,9 +46,9 @@
             this.panel1.AutoScroll = true;
             this.panel1.BackColor = System.Drawing.Color.DimGray;
             this.panel1.Controls.Add(this.MessageForm);
-            this.panel1.Location = new System.Drawing.Point(1505, 12);
+            this.panel1.Location = new System.Drawing.Point(338, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(387, 912);
+            this.panel1.Size = new System.Drawing.Size(535, 455);
             this.panel1.TabIndex = 1;
             // 
             // MessageForm
@@ -66,9 +66,9 @@
             // ClearLogButton
             // 
             this.ClearLogButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ClearLogButton.Location = new System.Drawing.Point(1505, 930);
+            this.ClearLogButton.Location = new System.Drawing.Point(612, 473);
             this.ClearLogButton.Name = "ClearLogButton";
-            this.ClearLogButton.Size = new System.Drawing.Size(387, 51);
+            this.ClearLogButton.Size = new System.Drawing.Size(261, 51);
             this.ClearLogButton.TabIndex = 1;
             this.ClearLogButton.Text = "Cleal Log";
             this.ClearLogButton.UseVisualStyleBackColor = true;
@@ -78,9 +78,9 @@
             // 
             this.ProgressNeuro.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ProgressNeuro.Location = new System.Drawing.Point(12, 987);
+            this.ProgressNeuro.Location = new System.Drawing.Point(12, 530);
             this.ProgressNeuro.Name = "ProgressNeuro";
-            this.ProgressNeuro.Size = new System.Drawing.Size(1880, 33);
+            this.ProgressNeuro.Size = new System.Drawing.Size(861, 33);
             this.ProgressNeuro.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.ProgressNeuro.TabIndex = 2;
             // 
@@ -91,7 +91,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Picture.Location = new System.Drawing.Point(12, 22);
             this.Picture.Name = "Picture";
-            this.Picture.Size = new System.Drawing.Size(1463, 902);
+            this.Picture.Size = new System.Drawing.Size(320, 445);
             this.Picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Picture.TabIndex = 3;
             this.Picture.TabStop = false;
@@ -99,7 +99,7 @@
             // TestButton
             // 
             this.TestButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.TestButton.Location = new System.Drawing.Point(1335, 930);
+            this.TestButton.Location = new System.Drawing.Point(192, 473);
             this.TestButton.Name = "TestButton";
             this.TestButton.Size = new System.Drawing.Size(140, 51);
             this.TestButton.TabIndex = 6;
@@ -110,7 +110,7 @@
             // RecogniseButton
             // 
             this.RecogniseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.RecogniseButton.Location = new System.Drawing.Point(1174, 930);
+            this.RecogniseButton.Location = new System.Drawing.Point(31, 473);
             this.RecogniseButton.Name = "RecogniseButton";
             this.RecogniseButton.Size = new System.Drawing.Size(155, 51);
             this.RecogniseButton.TabIndex = 7;
@@ -123,7 +123,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
-            this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.ClientSize = new System.Drawing.Size(885, 584);
             this.Controls.Add(this.RecogniseButton);
             this.Controls.Add(this.ClearLogButton);
             this.Controls.Add(this.TestButton);

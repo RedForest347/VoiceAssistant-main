@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using VoiceAssistant.Handles;
 
 namespace VoiceAssistant
@@ -75,7 +76,10 @@ namespace VoiceAssistant
         void OnRecogniseCustomCommand(object sender, Microsoft.Speech.Recognition.SpeechRecognizedEventArgs e)
         {
             string command = e.Result.Text;
-            Debug.Log("команда " + command + " распознана. Этот сервис " + (commandDictionary.ContainsKey(command) ? "" : "не ") + "содержит эту команду");
+            if (!commandDictionary.ContainsKey(command))
+            {
+                Debug.Log("команда " + command + " распознана. Этот сервис " + (commandDictionary.ContainsKey(command) ? "" : "не ") + "содержит эту команду");
+            }
 
             if (command == "закрыть сервис")
             {
@@ -84,8 +88,13 @@ namespace VoiceAssistant
                 return;
             }
 
-            Debug.Log("будет нажата клавиша " + commandDictionary[command]);
+            if (!commandDictionary.ContainsKey(command))
+            {
+                return;
+            }
 
+            Debug.Log("будет нажата клавиша " + commandDictionary[command]);
+            DoPressButton(new string[] { command});
             StartRecognise();
         }
 
@@ -99,7 +108,10 @@ namespace VoiceAssistant
                 return;
             }
             string requaredButton = commandDictionary[recognisedWord];
-            Debug.Log("необходимо нажать \"" + requaredButton + "\"");
+            //SendKeys.Send(requaredButton);
+            //Keyboard.Send(Keyboard.ScanCodeShort.KEY_I);
+            PressKeyHandles.PressKey(requaredButton);
+            //Debug.Log("необходимо нажать \"" + requaredButton + "\"");
         }
 
         void ReturnControl()
