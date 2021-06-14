@@ -28,7 +28,7 @@ namespace VoiceAssistant
 
         public override void OnRecognised(string[] recognisedWords)
         {
-            DoOpenFolder(recognisedWords);
+            DoOpenFile(recognisedWords);
             ReturnControlToListenManager();
         }
 
@@ -48,7 +48,7 @@ namespace VoiceAssistant
             return commandDictionary.Keys.ToList();
         }
 
-        void DoOpenFolder(string[] recognisedWords)
+        void DoOpenFile(string[] recognisedWords)
         {
             string command = ConvertToCommand(recognisedWords);
 

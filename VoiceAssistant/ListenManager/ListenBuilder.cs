@@ -33,12 +33,15 @@ namespace VoiceAssistant
 
         void LoadAllServices()
         {
-            LoadService(new OpenFolderService());
-            LoadService(new StartFileService());
+            LoadService<OpenFolderService>();
+            LoadService<StartFileService>();
+            LoadService<PressButtonTankService>();
+            LoadService<PressButtonPlaneService>();
         }
 
-        void LoadService(ServiceBase service)
+        void LoadService<T>() where T : ServiceBase, new()
         {
+            ServiceBase service = new T();
             ServiceData data = service.GetInitData();
             AddServiceWordsToChoicesList(data);
             AddServiceToEvents(data);

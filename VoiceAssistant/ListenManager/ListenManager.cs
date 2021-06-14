@@ -26,6 +26,7 @@ namespace VoiceAssistant
         List<List<string>> choicesList;
         ListenSettings ls;
 
+        float requaredConfidence = 0.85f;
         SpeechRecognitionEngine current_sre;
         EventHandler<SpeechRecognizedEventArgs> onRecogniseCurrent;
 
@@ -49,20 +50,16 @@ namespace VoiceAssistant
             }
         }
 
-        void Init()
-        {
-
-        }
-
         public void Start()
         {
-            StartListenAssistentNameInternal(AssistentNameRecognised);
+            StartListenAssistantNameInternal(AssistantNameRecognised);
         }
 
         void Recognised(object sender, SpeechRecognizedEventArgs e)
         {
-            if (e.Result.Confidence < 0.85f)
+            if (e.Result.Confidence < requaredConfidence)
             {
+                Debug.Log("не распознано \"" + e.Result.Text + "\". Точность " + e.Result.Confidence);
                 return;
             }
 
@@ -72,14 +69,14 @@ namespace VoiceAssistant
 
         }
 
-        void AssistentNameRecognised(object sender, SpeechRecognizedEventArgs e)
+        void AssistantNameRecognised(object sender, SpeechRecognizedEventArgs e)
         {
-            if (e.Result.Confidence < 0.85f)
+            if (e.Result.Confidence < requaredConfidence)
             {
                 return;
             }
 
-            StartListedCommandInternal(SendMessageToServices);
+            StartListenCommandInternal(SendMessageToServices);
         }
 
         void SendMessageToServices(object sender, SpeechRecognizedEventArgs e)
@@ -90,6 +87,12 @@ namespace VoiceAssistant
             for (int i = 0; i < e.Result.Words.Count; i++)
             {
                 commands[i] = e.Result.Words.ElementAt(i).Text;
+            }
+
+            if (!recogniseDictionary.ContainsKey(keyKommand))
+            {
+                Debug.LogError("ключ " + keyKommand + " отсутствует в словаре");
+                return;
             }
 
             recogniseDictionary[keyKommand].Recognised(commands);
@@ -121,7 +124,7 @@ namespace VoiceAssistant
         public void ReturnControl()
         {
             Debug.Log("Сервис закончил свою работу. повторный запуск ListenManager");
-            StartListenAssistentNameInternal(AssistentNameRecognised);
+            StartListenAssistantNameInternal(AssistantNameRecognised);
         }
 
         public void Stop()
@@ -133,32 +136,32 @@ namespace VoiceAssistant
         #region Start Listen
 
 
-        public void StartListenAssistentName(EventHandler<SpeechRecognizedEventArgs> onRecognise)
+        public void StartListenAssistantName(EventHandler<SpeechRecognizedEventArgs> onRecognise)
         {
-            StartListenAssistentNameInternal(onRecognise);
+            StartListenAssistantNameInternal(onRecognise);
         }
 
-        void StartListenAssistentNameInternal(EventHandler<SpeechRecognizedEventArgs> onRecognise)
+        void StartListenAssistantNameInternal(EventHandler<SpeechRecognizedEventArgs> onRecognise)
         {
             List<string[]> choses = new List<string[]>();
-            choses.Add(new string[] { ls.assistentName });
+            choses.Add(new string[] { ls.AssistantName });
             onRecogniseCurrent = onRecognise;
 
             SpeechRecognitionEngine sre = PrepareSpeechRecognition(choses);
             sre.RecognizeAsync(RecognizeMode.Multiple);
             sre.SpeechRecognized += Recognised;
-            sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("RecognizeCompleted");
+            //sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("Recognize Completed");
             current_sre = sre;
 
             Debug.Log("Ожидание вызова голосового ассистента");
         }
 
-        public void StartListedCommand(EventHandler<SpeechRecognizedEventArgs> onRecognise)
+        public void StartListenCommand(EventHandler<SpeechRecognizedEventArgs> onRecognise)
         {
-            StartListedCommandInternal(onRecognise);
+            StartListenCommandInternal(onRecognise);
         }
 
-        void StartListedCommandInternal(EventHandler<SpeechRecognizedEventArgs> onRecognise)
+        void StartListenCommandInternal(EventHandler<SpeechRecognizedEventArgs> onRecognise)
         {
             List<string[]> choses = new List<string[]>();
             onRecogniseCurrent = onRecognise;
@@ -171,31 +174,30 @@ namespace VoiceAssistant
             SpeechRecognitionEngine sre = PrepareSpeechRecognition(choses);
             sre.RecognizeAsync(RecognizeMode.Multiple);
             sre.SpeechRecognized += Recognised;
-            sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("RecognizeCompleted");
+            //sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("Recognize Completed");
             current_sre = sre;
 
             Debug.Log("Ожидание команды");
         }
 
-        public void StartListenCustom(EventHandler<SpeechRecognizedEventArgs> onRecognise, List<string[]> choses)
+        public void StartListenCustomCommand(List<string[]> choses, EventHandler<SpeechRecognizedEventArgs> onRecognise)
         {
-            StartListenCustomBase(onRecognise, choses);
+            
+            StartListenCustomCommandInternal(choses, onRecognise);
         }
 
-        void StartListenCustomBase(EventHandler<SpeechRecognizedEventArgs> onRecognise, List<string[]> choses)
+        void StartListenCustomCommandInternal(List<string[]> choses, EventHandler<SpeechRecognizedEventArgs> onRecognise)
         {
             onRecogniseCurrent = onRecognise;
 
             SpeechRecognitionEngine sre = PrepareSpeechRecognition(choses);
             sre.RecognizeAsync(RecognizeMode.Multiple);
             sre.SpeechRecognized += Recognised;
-            sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("RecognizeCompleted");
+            //sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("Recognize Completed");
             current_sre = sre;
 
             Debug.Log("Ожидание команды");
         }
-
-
 
 
         #endregion Start Listen
@@ -209,14 +211,14 @@ namespace VoiceAssistant
             static string filePath = @"data\settings.txt";
 
             [JsonProperty("Имя голосового ассистента")]
-            public string assistentName { get; set; }
+            public string AssistantName { get; set; }
 
             [JsonProperty("Имя пользователя")]
             public string userName { get; set; }
 
             public ListenSettings()
             {
-                assistentName = "Алиса";
+                AssistantName = "Алиса";
                 userName = "Рэд";
             }
 
@@ -227,30 +229,9 @@ namespace VoiceAssistant
 
             public static ListenSettings Load()
             {
-
-                
                 ListenSettings ls = FileHandler.LoadFromFile<ListenSettings>(filePath);
-
-                Debug.Log("Параметры голосового ассистента загружены. имя = " + ls.assistentName + " имя пользователя = " + ls.userName);
-
+                Debug.Log("Параметры голосового ассистента успешно загружены. имя ассистена: " + ls.AssistantName + " имя пользователя: " + ls.userName);
                 return ls;
-
-                /**StreamReader sr = new StreamReader(filePath);
-                string json = sr.ReadToEndAsync().Result;
-                //Debug.Log("json ls = " + json);
-                ListenSettings ls;
-                try
-                {
-                    ls = JsonConvert.DeserializeObject<ListenSettings>(json);
-                }
-                catch (JsonReaderException)
-                {
-                    ls = new ListenSettings();
-                    Debug.Log("Файл поврежден или содержит некорректные данные");
-                }
-                sr.Close();
-                */
-
 
             }
 
@@ -258,21 +239,8 @@ namespace VoiceAssistant
             {
 
                 FileHandler.SaveToFile(filePath, settings);
-                Debug.Log("настройки успешно сохранены");
-                /**FileStream fstream = new FileStream(filePath, FileMode.OpenOrCreate);
-
-                string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
-
-                fstream.Write(Encoding.Default.GetBytes(json), 0, json.Length);
-                fstream.Close();*/
-
+                Debug.Log("настройки голосового ассистента успешно сохранены");
             }
-
-
-
-
-
         }
     }
-
 }

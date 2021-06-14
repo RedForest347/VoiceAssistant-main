@@ -29,7 +29,6 @@ namespace VoiceAssistant
 
         private void RecogniseButton_Click(object sender, EventArgs e)
         {
-            //GrammarTest.Start();
             LoadListenManager();
         }
 
