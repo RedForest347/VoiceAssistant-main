@@ -57,9 +57,7 @@ namespace VoiceAssistant
                 Debug.LogError("Сервис " + GetType() + " не содержит команды " + command);
                 return;
             }
-            System.Collections.Generic.List<int> ddd = new System.Collections.Generic.List<int>();
 
-            ddd[7] = 3;
             string filePath = commandDictionary[command];
 
             if (filePath.EndsWith(".bat"))

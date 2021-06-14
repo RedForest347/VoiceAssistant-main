@@ -4,21 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using VoiceAssistant.Handles;
 
 namespace VoiceAssistant
 {
     class PressButtonTankService : ServiceBase
     {
-        List<string> firstWords = new List<string>() {"танки" };
-        List<string> secondWords = new List<string>() {" " };
+        List<string> firstWords = new List<string>() { "танки", "старбаунд", "самолеты" };
+        List<string> secondWords = new List<string>() { " " };
         Dictionary<string, string> commandDictionary;
+        string presetFileName;
 
         //набор слов в формате: [первые ключевые слова],[вторые ключевые слова]...
         public override ServiceData GetInitData()
         {
-            InitCommandDictionary();
+
             List<List<string>> initData = new List<List<string>> { firstWords, secondWords };
 
             return new ServiceData(initData, this, GetType().Name);
@@ -26,24 +26,43 @@ namespace VoiceAssistant
 
         public override void OnRecognised(string[] recognisedWords)
         {
-            Debug.Log("сервис голосового управления пресет \"танки\" получил управление");
+            SetPreset(recognisedWords[0]);
+
+            InitCommandDictionary();
+            Debug.Log("сервис голосового управления пресет \"" + recognisedWords[0] + "\" получил управление");
             StartRecognise();
+        }
+
+        void SetPreset(string presetName)
+        {
+            if (presetName == "танки")
+            {
+                presetFileName = @"data\pressButtonTank.swmodel";
+            }
+            else if (presetName == "старбаунд")
+            {
+                presetFileName = @"data\pressButtonStarbound.swmodel";
+            }
+            else if (presetName == "самолеты")
+            {
+                presetFileName = @"data\pressButtonPlane.swmodel";
+            }
+            else
+            {
+                Debug.Log("пресет " + presetName + " не найден. будет активирован пресет \"танки\"");
+                presetFileName = @"data\pressButtonTank.swmodel";
+            }
         }
 
         void InitCommandDictionary()
         {
-            List<PressButtonData> folderData = PressButtonData.Load();
+            List<PressButtonData> folderData = PressButtonData.Load(presetFileName);
             commandDictionary = new Dictionary<string, string>();
 
             for (int i = 0; i < folderData.Count; i++)
             {
                 commandDictionary.Add(folderData[i].commandName, folderData[i].buttonString);
             }
-        }
-
-        List<string> GetCommandList()
-        {
-            return commandDictionary.Keys.ToList();
         }
 
         void StartRecognise()
@@ -55,7 +74,7 @@ namespace VoiceAssistant
         List<string[]> ConstructChosesFromDataFile()
         {
             List<string[]> choses = new List<string[]>();
-            List<PressButtonData> buttonDatas = PressButtonData.Load();
+            List<PressButtonData> buttonDatas = PressButtonData.Load(presetFileName);
             choses.Add(new string[buttonDatas.Count]);
 
             for (int i = 0; i < buttonDatas.Count; i++)
@@ -94,7 +113,7 @@ namespace VoiceAssistant
             }
 
             Debug.Log("будет нажата клавиша " + commandDictionary[command]);
-            DoPressButton(new string[] { command});
+            DoPressButton(new string[] { command });
             StartRecognise();
         }
 
@@ -108,10 +127,7 @@ namespace VoiceAssistant
                 return;
             }
             string requaredButton = commandDictionary[recognisedWord];
-            //SendKeys.Send(requaredButton);
-            //Keyboard.Send(Keyboard.ScanCodeShort.KEY_I);
             PressKeyHandles.PressKey(requaredButton);
-            //Debug.Log("необходимо нажать \"" + requaredButton + "\"");
         }
 
         void ReturnControl()
@@ -161,6 +177,11 @@ namespace VoiceAssistant
             }
 
             public static List<PressButtonData> Load()
+            {
+                return FileHandler.LoadFromFile<List<PressButtonData>>(filePath);
+            }
+
+            public static List<PressButtonData> Load(string filePath)
             {
                 return FileHandler.LoadFromFile<List<PressButtonData>>(filePath);
             }

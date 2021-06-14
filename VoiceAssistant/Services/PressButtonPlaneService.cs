@@ -10,7 +10,7 @@ namespace VoiceAssistant
 {
     class PressButtonPlaneService : ServiceBase
     {
-        List<string> firstWords = new List<string>() {"самолеты" };
+        List<string> firstWords = new List<string>() {"не используется" };
         List<string> secondWords = new List<string>() {" " };
         Dictionary<string, string> commandDictionary;
 
@@ -38,11 +38,6 @@ namespace VoiceAssistant
             {
                 commandDictionary.Add(folderData[i].commandName, folderData[i].buttonString);
             }
-        }
-
-        List<string> GetCommandList()
-        {
-            return commandDictionary.Keys.ToList();
         }
 
         void StartRecognise()
@@ -75,7 +70,10 @@ namespace VoiceAssistant
         void OnRecogniseCustomCommand(object sender, Microsoft.Speech.Recognition.SpeechRecognizedEventArgs e)
         {
             string command = e.Result.Text;
-            
+            if (!commandDictionary.ContainsKey(command))
+            {
+                Debug.Log("команда " + command + " распознана. Этот сервис " + (commandDictionary.ContainsKey(command) ? "" : "не ") + "содержит эту команду");
+            }
 
             if (command == "закрыть сервис")
             {
@@ -84,9 +82,13 @@ namespace VoiceAssistant
                 return;
             }
 
-            Debug.Log("команда " + command + " распознана. Этот сервис " + (commandDictionary.ContainsKey(command) ? "" : "не ") + "содержит эту команду");
-            Debug.Log("будет нажата клавиша " + commandDictionary[command]);
+            if (!commandDictionary.ContainsKey(command))
+            {
+                return;
+            }
 
+            Debug.Log("будет нажата клавиша " + commandDictionary[command]);
+            DoPressButton(new string[] { command });
             StartRecognise();
         }
 
@@ -100,7 +102,7 @@ namespace VoiceAssistant
                 return;
             }
             string requaredButton = commandDictionary[recognisedWord];
-            Debug.Log("необходимо нажать \"" + requaredButton + "\"");
+            PressKeyHandles.PressKey(requaredButton);
         }
 
         void ReturnControl()
