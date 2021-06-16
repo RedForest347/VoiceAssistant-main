@@ -109,8 +109,10 @@
     </Compile>
     <Compile Include="GrammarTest.cs" />
     <Compile Include="Handles\Keyboard.cs" />
-    <Compile Include="Handles\PressKeyHandles.cs" />
     <Compile Include="Handles\PathExtension.cs" />
+    <Compile Include="Handles\PressKeyHandles.cs" />
+    <Compile Include="Handles\PressKeyObserver.cs" />
+    <Compile Include="Handles\User32.cs" />
     <Compile Include="ListenManager\ListenBuilder.cs" />
     <Compile Include="ListenManager\ListenManager.cs" />
     <Compile Include="ListenManager\RecogniseData.cs" />

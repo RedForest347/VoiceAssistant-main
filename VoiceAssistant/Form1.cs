@@ -5,22 +5,36 @@ namespace VoiceAssistant
 {
     public partial class Form1 : Form
     {
+        public event Action<float> OnConfidenceChanged;
+
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void Init()
         {
             Debug.form1 = this;
+            VoiceAssistant.Handles.PressKeyObserver.Start();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Init();
+            //LoadListenManager();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Deinit();
+        }
+
+        private void Deinit()
+        {
+            VoiceAssistant.Handles.PressKeyObserver.Stop();
         }
 
         #region Click
-
-        private void TestButton_Click(object sender, EventArgs e)
-        {
-            Debug.Log("TestButton_Click");
-        }
 
         private void ClearLogButton_Click(object sender, EventArgs e)
         {
@@ -46,9 +60,6 @@ namespace VoiceAssistant
 
         #region ForDebugLog
 
-        delegate void WriteLogDelegate(string text);
-        delegate void ClearLogDelegate();
-        delegate void ProgressDelegate(int value);       
 
         public void WriteMassage(string text)
         {
@@ -62,29 +73,30 @@ namespace VoiceAssistant
             Invoke(clearLogDelegate);
         }
 
-        public void ProgressMaxValue(int value)
-        {
-            Action<int> progressDelegate = new Action<int>((_value) => ProgressNeuro.Maximum = _value);
-            Invoke(progressDelegate, new object[] { value });
-        }
-
-        public void ProgressCurrentValue(int value)
-        {
-            Action<int> progressDelegate = new Action<int>((_value) => ProgressNeuro.Value = _value);
-            Invoke(progressDelegate, new object[] { value });
-        }
-
-        public void ProgressAddCurrentValue(int value)
-        {
-            Action<int> progressDelegate = new Action<int>((_value) => ProgressNeuro.Value += value);
-            Invoke(progressDelegate, new object[] { value });
-        }
 
         #endregion ForDebugLog
 
 
 
 
+        private void ConfidenceBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
 
+
+                if (int.TryParse(ConfidenceBox.Text, out int result) && result >= 0 && result <= 100)
+                {
+                    OnConfidenceChanged?.Invoke(result / 100f);
+                    ConfidenceBox.Text = "";
+                    label1.Focus();
+                    Debug.Log("требуемая точность изменена на " + result / 100f);
+                }
+                else
+                {
+                    Debug.Log("введены некорректное значение");
+                }
+            }
+        }
     }
 }

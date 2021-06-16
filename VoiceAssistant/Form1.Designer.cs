@@ -31,24 +31,26 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.MessageForm = new System.Windows.Forms.Label();
             this.ClearLogButton = new System.Windows.Forms.Button();
-            this.ProgressNeuro = new System.Windows.Forms.ProgressBar();
-            this.Picture = new System.Windows.Forms.PictureBox();
-            this.TestButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.ConfidenceBox = new System.Windows.Forms.TextBox();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.RecogniseButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Picture)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.AutoScroll = true;
+            this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel1.BackColor = System.Drawing.Color.DimGray;
             this.panel1.Controls.Add(this.MessageForm);
-            this.panel1.Location = new System.Drawing.Point(338, 12);
+            this.panel1.Location = new System.Drawing.Point(312, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(535, 455);
+            this.panel1.Size = new System.Drawing.Size(410, 449);
             this.panel1.TabIndex = 1;
             // 
             // MessageForm
@@ -65,54 +67,51 @@
             // 
             // ClearLogButton
             // 
-            this.ClearLogButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ClearLogButton.Location = new System.Drawing.Point(612, 473);
+            this.ClearLogButton.Location = new System.Drawing.Point(3, 107);
             this.ClearLogButton.Name = "ClearLogButton";
-            this.ClearLogButton.Size = new System.Drawing.Size(261, 51);
+            this.ClearLogButton.Size = new System.Drawing.Size(286, 51);
             this.ClearLogButton.TabIndex = 1;
             this.ClearLogButton.Text = "Cleal Log";
             this.ClearLogButton.UseVisualStyleBackColor = true;
             this.ClearLogButton.Click += new System.EventHandler(this.ClearLogButton_Click);
             // 
-            // ProgressNeuro
+            // label1
             // 
-            this.ProgressNeuro.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ProgressNeuro.Location = new System.Drawing.Point(12, 530);
-            this.ProgressNeuro.Name = "ProgressNeuro";
-            this.ProgressNeuro.Size = new System.Drawing.Size(861, 33);
-            this.ProgressNeuro.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.ProgressNeuro.TabIndex = 2;
+            this.label1.BackColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(5, 57);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(136, 44);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Требуемая точность";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // Picture
+            // ConfidenceBox
             // 
-            this.Picture.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Picture.Location = new System.Drawing.Point(12, 22);
-            this.Picture.Name = "Picture";
-            this.Picture.Size = new System.Drawing.Size(320, 445);
-            this.Picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Picture.TabIndex = 3;
-            this.Picture.TabStop = false;
+            this.ConfidenceBox.Location = new System.Drawing.Point(145, 56);
+            this.ConfidenceBox.Multiline = true;
+            this.ConfidenceBox.Name = "ConfidenceBox";
+            this.ConfidenceBox.Size = new System.Drawing.Size(144, 45);
+            this.ConfidenceBox.TabIndex = 9;
+            this.ConfidenceBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ConfidenceBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ConfidenceBox_KeyDown);
             // 
-            // TestButton
+            // panel2
             // 
-            this.TestButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.TestButton.Location = new System.Drawing.Point(192, 473);
-            this.TestButton.Name = "TestButton";
-            this.TestButton.Size = new System.Drawing.Size(140, 51);
-            this.TestButton.TabIndex = 6;
-            this.TestButton.Text = "Test";
-            this.TestButton.UseVisualStyleBackColor = true;
-            this.TestButton.Click += new System.EventHandler(this.TestButton_Click);
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.panel2.Controls.Add(this.RecogniseButton);
+            this.panel2.Controls.Add(this.ClearLogButton);
+            this.panel2.Controls.Add(this.ConfidenceBox);
+            this.panel2.Controls.Add(this.label1);
+            this.panel2.Location = new System.Drawing.Point(13, 298);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(293, 163);
+            this.panel2.TabIndex = 10;
             // 
             // RecogniseButton
             // 
-            this.RecogniseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.RecogniseButton.Location = new System.Drawing.Point(31, 473);
+            this.RecogniseButton.Location = new System.Drawing.Point(3, 3);
             this.RecogniseButton.Name = "RecogniseButton";
-            this.RecogniseButton.Size = new System.Drawing.Size(155, 51);
+            this.RecogniseButton.Size = new System.Drawing.Size(286, 51);
             this.RecogniseButton.TabIndex = 7;
             this.RecogniseButton.Text = "Start recognise";
             this.RecogniseButton.UseVisualStyleBackColor = true;
@@ -123,20 +122,17 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
-            this.ClientSize = new System.Drawing.Size(885, 584);
-            this.Controls.Add(this.RecogniseButton);
-            this.Controls.Add(this.ClearLogButton);
-            this.Controls.Add(this.TestButton);
-            this.Controls.Add(this.Picture);
-            this.Controls.Add(this.ProgressNeuro);
+            this.ClientSize = new System.Drawing.Size(734, 473);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Picture)).EndInit();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -145,10 +141,10 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label MessageForm;
-        private System.Windows.Forms.ProgressBar ProgressNeuro;
-        private System.Windows.Forms.Button TestButton;
-        public System.Windows.Forms.PictureBox Picture;
         private System.Windows.Forms.Button ClearLogButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox ConfidenceBox;
+        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button RecogniseButton;
     }
 }

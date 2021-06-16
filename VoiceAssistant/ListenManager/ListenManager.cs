@@ -203,6 +203,16 @@ namespace VoiceAssistant
         #endregion Start Listen
 
 
+        #region ButtonPress
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="newConfidence"></param>
+
+
+        #endregion ButtonPress
+
 
         private class ListenSettings
         {
