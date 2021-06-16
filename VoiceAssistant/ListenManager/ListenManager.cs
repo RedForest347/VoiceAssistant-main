@@ -37,6 +37,12 @@ namespace VoiceAssistant
             choicesList = builder.GetChoicesList;
             ls = ListenSettings.Load();
             InitServices();
+            Init();
+        }
+
+        void Init()
+        {
+            Debug.form1.OnConfidenceChanged += ChangeConfidence;
         }
 
         void InitServices()
@@ -203,6 +209,11 @@ namespace VoiceAssistant
         #endregion Start Listen
 
 
+
+        void ChangeConfidence(float newConfidence)
+        {
+            requaredConfidence = newConfidence;
+        }
 
         private class ListenSettings
         {
