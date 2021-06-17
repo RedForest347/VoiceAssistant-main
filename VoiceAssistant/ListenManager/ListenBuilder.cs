@@ -35,7 +35,7 @@ namespace VoiceAssistant
         {
             LoadService<OpenFolderService>();
             LoadService<StartFileService>();
-            LoadService<PressButtonService>();
+            LoadService<PressButtonTankService>();
         }
 
         void LoadService<T>() where T : ServiceBase, new()

@@ -33,10 +33,10 @@ namespace VoiceAssistant.Handles
             {
                 folderData = JsonConvert.DeserializeObject<T>(json);
             }
-            catch (JsonReaderException)
+            catch (JsonReaderException e)
             {
                 folderData = new T();
-                Debug.LogError("Файл " + filePath + " поврежден или содержит некорректные данные");
+                Debug.LogError("Файл " + filePath + " поврежден или содержит некорректные данные: " + e.Message);
             }
             catch(Exception e)
             {

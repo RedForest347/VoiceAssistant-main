@@ -9,21 +9,30 @@ namespace VoiceAssistant.Handles
 {
     class PressKeyHandles
     {
-        static int sleepTime = 20;
+        static int sleepTime = 40;
+
+        static Dictionary<string, ScanCodeShort> keyDictionary = CreateKeyDictionary();
+
+
         public static void PressKey(string button)
         {
             ScanCodeShort scanCodeShort = GetScanCodeShort(button);
 
             Keyboard.SendPress(scanCodeShort);
 
-            Thread.Sleep(sleepTime);
+            Action<object> unpress = (code) => WaitAndUnpress((ScanCodeShort)code);
 
+            Task task = new Task(unpress, scanCodeShort);
+        }
+
+        static void WaitAndUnpress(ScanCodeShort scanCodeShort)
+        {
+            Thread.Sleep(sleepTime);
             Keyboard.SendUnpress(scanCodeShort);
         }
 
         public static ScanCodeShort GetScanCodeShort(string key)
         {
-            Dictionary<string, ScanCodeShort> keyDictionary = CreateKeyDictionary();
             key = key.ToUpper();
 
             if (!keyDictionary.ContainsKey(key))
@@ -34,7 +43,6 @@ namespace VoiceAssistant.Handles
 
             return keyDictionary[key];
 
-            
         }
 
 
@@ -248,9 +256,7 @@ namespace VoiceAssistant.Handles
                 { "OEM_CLEAR", (ScanCodeShort)0 }
             };
 
-
             return keyDictionary;
         }
-
     }
 }

@@ -6,16 +6,35 @@ namespace VoiceAssistant
     public partial class Form1 : Form
     {
         public event Action<float> OnConfidenceChanged;
+        public event Action onExit;
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void Init()
         {
             Debug.form1 = this;
+            VoiceAssistant.Handles.PressKeyObserver.Start();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Init();
             LoadListenManager();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Deinit();
+            onExit?.Invoke();
+        }
+
+        private void Deinit()
+        {
+            VoiceAssistant.Handles.PressKeyObserver.Stop();
+            lm?.Stop();
         }
 
         #region Click
@@ -32,12 +51,22 @@ namespace VoiceAssistant
 
         #endregion Click
 
+        ListenManager lm;
+
         void LoadListenManager()
         {
-            ListenBuilder builder = new ListenBuilder();
-            builder.Build();
-            ListenManager lm = new ListenManager(builder);
-            lm.Start();
+            if (lm != null)
+            {
+                lm.Stop();
+                lm.Restart();
+            }
+            else
+            {
+                ListenBuilder builder = new ListenBuilder();
+                builder.Build();
+                lm = new ListenManager(builder);
+                lm.Start();
+            }
         }
 
 
@@ -49,6 +78,7 @@ namespace VoiceAssistant
         {
             Action writeLog = () => MessageForm.Text += "\n" + text + "\n";
             Invoke(writeLog);
+            panel1.VerticalScroll.Value = panel1.VerticalScroll.Maximum;
         }
 
         public void ClearLog()
