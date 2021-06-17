@@ -22,7 +22,6 @@ namespace VoiceAssistant.Handles
         public static bool FilePathContainArguments(string filePathWithArguments)
         {
             string arguments = GetArguments(filePathWithArguments);
-            Debug.Log("file " + filePathWithArguments + " " + (arguments.Trim().Length > 0) + " arguments = " + arguments);
             return arguments.Trim().Length > 0;
         }
 

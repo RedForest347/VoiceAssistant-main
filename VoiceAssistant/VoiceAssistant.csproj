@@ -107,8 +107,8 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="GrammarTest.cs" />
     <Compile Include="Handles\Keyboard.cs" />
+    <Compile Include="Handles\KeyConverter.cs" />
     <Compile Include="Handles\PathExtension.cs" />
     <Compile Include="Handles\PressKeyHandles.cs" />
     <Compile Include="Handles\PressKeyObserver.cs" />
@@ -118,7 +118,6 @@
     <Compile Include="ListenManager\RecogniseData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\PressButtonPlaneService.cs" />
     <Compile Include="Services\PressButtonTankService.cs" />
     <Compile Include="Services\StartFileService.cs" />
     <Compile Include="Services\Support\IService.cs" />

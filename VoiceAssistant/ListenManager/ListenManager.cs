@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Microsoft.Speech.Recognition;
 using Newtonsoft.Json;
 using VoiceAssistant.Handles;
+using KeysConverter = VoiceAssistant.Handles.KeysConverter;
 
 namespace VoiceAssistant
 {
@@ -27,6 +29,7 @@ namespace VoiceAssistant
         ListenSettings ls;
 
         float requaredConfidence = 0.85f;
+        Keys restartKey = Keys.Home;
         SpeechRecognitionEngine current_sre;
         EventHandler<SpeechRecognizedEventArgs> onRecogniseCurrent;
 
@@ -35,8 +38,7 @@ namespace VoiceAssistant
         {
             recogniseDictionary = builder.GetRecogniseDictionary;
             choicesList = builder.GetChoicesList;
-            ls = ListenSettings.Load();
-            InitServices();
+            Init();
         }
 
         void InitServices()
@@ -50,12 +52,70 @@ namespace VoiceAssistant
             }
         }
 
+        //останавливает текущее прослушивание и запускает новое
         public void Start()
         {
+            StopCurrentListening();
             StartListenAssistantNameInternal(AssistantNameRecognised);
         }
 
-        void Recognised(object sender, SpeechRecognizedEventArgs e)
+        public void Restart()
+        {
+            Deinit();
+            Init();
+            Start();
+        }
+
+        public void Stop()
+        {
+            StopCurrentListening();
+            Deinit();
+        }
+
+        void Init()
+        {
+            ls = ListenSettings.Load();
+            requaredConfidence = ls.confidence;
+            Keys newKey = KeysConverter.StringToKeys(ls.restartKey);
+
+            if ((int)newKey == -1)
+            {
+                Debug.LogWarning("некорректная клавиша перезагрузки в файле настроек. клавиша изменена на \"Home\"");
+                newKey = Keys.Home;
+            }
+            restartKey = newKey;
+
+            InitServices();
+            PressKeyObserver.onKeyDown += KeyPressed;
+        }
+
+        void Deinit()
+        {
+            PressKeyObserver.onKeyDown -= KeyPressed;
+        }
+
+
+        void StopCurrentListening()
+        {
+            if (current_sre != null)
+            {
+                current_sre.RecognizeAsyncStop();
+                current_sre.RecognizeAsyncCancel();
+                current_sre = null;
+            }
+        }
+
+        public void ReturnControl()
+        {
+            Debug.Log("Сервис закончил свою работу. повторный запуск ListenManager");
+            StartListenAssistantNameInternal(AssistantNameRecognised);
+        }
+
+
+        #region Recognise
+
+
+        void RecognisedInternal(object sender, SpeechRecognizedEventArgs e)
         {
             if (e.Result.Confidence < requaredConfidence)
             {
@@ -76,10 +136,10 @@ namespace VoiceAssistant
                 return;
             }
 
-            StartListenCommandInternal(SendMessageToServices);
+            StartListenServiceCommandInternal(ServiceCommandRecognised);
         }
 
-        void SendMessageToServices(object sender, SpeechRecognizedEventArgs e)
+        void ServiceCommandRecognised(object sender, SpeechRecognizedEventArgs e)
         {
             string keyKommand = e.Result.Words.ElementAt(0).Text;
             string[] commands = new string[e.Result.Words.Count];
@@ -116,21 +176,8 @@ namespace VoiceAssistant
             return sre;
         }
 
-        void StopCurrentListening()
-        {
-            current_sre.RecognizeAsyncCancel();
-        }
 
-        public void ReturnControl()
-        {
-            Debug.Log("Сервис закончил свою работу. повторный запуск ListenManager");
-            StartListenAssistantNameInternal(AssistantNameRecognised);
-        }
-
-        public void Stop()
-        {
-
-        }
+        #endregion Recognised
 
 
         #region Start Listen
@@ -149,19 +196,19 @@ namespace VoiceAssistant
 
             SpeechRecognitionEngine sre = PrepareSpeechRecognition(choses);
             sre.RecognizeAsync(RecognizeMode.Multiple);
-            sre.SpeechRecognized += Recognised;
+            sre.SpeechRecognized += RecognisedInternal;
             //sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("Recognize Completed");
             current_sre = sre;
 
             Debug.Log("Ожидание вызова голосового ассистента");
         }
 
-        public void StartListenCommand(EventHandler<SpeechRecognizedEventArgs> onRecognise)
+        public void StartListenServiceCommand(EventHandler<SpeechRecognizedEventArgs> onRecognise)
         {
-            StartListenCommandInternal(onRecognise);
+            StartListenServiceCommandInternal(onRecognise);
         }
 
-        void StartListenCommandInternal(EventHandler<SpeechRecognizedEventArgs> onRecognise)
+        void StartListenServiceCommandInternal(EventHandler<SpeechRecognizedEventArgs> onRecognise)
         {
             List<string[]> choses = new List<string[]>();
             onRecogniseCurrent = onRecognise;
@@ -173,7 +220,7 @@ namespace VoiceAssistant
 
             SpeechRecognitionEngine sre = PrepareSpeechRecognition(choses);
             sre.RecognizeAsync(RecognizeMode.Multiple);
-            sre.SpeechRecognized += Recognised;
+            sre.SpeechRecognized += RecognisedInternal;
             //sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("Recognize Completed");
             current_sre = sre;
 
@@ -192,7 +239,7 @@ namespace VoiceAssistant
 
             SpeechRecognitionEngine sre = PrepareSpeechRecognition(choses);
             sre.RecognizeAsync(RecognizeMode.Multiple);
-            sre.SpeechRecognized += Recognised;
+            sre.SpeechRecognized += RecognisedInternal;
             //sre.RecognizeCompleted += (object sender, RecognizeCompletedEventArgs e) => Debug.Log("Recognize Completed");
             current_sre = sre;
 
@@ -203,15 +250,20 @@ namespace VoiceAssistant
         #endregion Start Listen
 
 
-        #region ButtonPress
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="newConfidence"></param>
+        #region KeyPress
 
 
-        #endregion ButtonPress
+        void KeyPressed(Keys key)
+        {
+            if (key == restartKey && PressKeyObserver.KeyPressed(Keys.LShiftKey))
+            {
+                Restart();
+            }
+        }
+
+
+
+        #endregion KeyPress
 
 
         private class ListenSettings
@@ -225,6 +277,12 @@ namespace VoiceAssistant
 
             [JsonProperty("Имя пользователя")]
             public string userName { get; set; }
+
+            [JsonProperty("Кнопка перезапуска голосового ассистента")]
+            public string restartKey { get; set; }
+
+            [JsonProperty("Требуемая точность")]
+            public float confidence { get; set; }
 
             public ListenSettings()
             {
@@ -240,7 +298,7 @@ namespace VoiceAssistant
             public static ListenSettings Load()
             {
                 ListenSettings ls = FileHandler.LoadFromFile<ListenSettings>(filePath);
-                Debug.Log("Параметры голосового ассистента успешно загружены. имя ассистена: " + ls.AssistantName + " имя пользователя: " + ls.userName);
+                Debug.Log("Параметры голосового ассистента успешно загружены");
                 return ls;
 
             }
