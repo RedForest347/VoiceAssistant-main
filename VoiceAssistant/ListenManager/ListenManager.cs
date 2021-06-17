@@ -266,6 +266,11 @@ namespace VoiceAssistant
         #endregion KeyPress
 
 
+        void ChangeConfidence(float newConfidence)
+        {
+            requaredConfidence = newConfidence;
+        }
+
         private class ListenSettings
         {
 

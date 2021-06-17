@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using static VoiceAssistant.Handles.Keyboard;
 
 namespace VoiceAssistant.Handles
@@ -18,8 +17,8 @@ namespace VoiceAssistant.Handles
         public static void PressKey(string button)
         {
             ScanCodeShort scanCodeShort = GetScanCodeShort(button);
-            Keyboard.SendPress(scanCodeShort);
 
+            Keyboard.SendPress(scanCodeShort);
 
             Action<object> unpress = (code) => WaitAndUnpress((ScanCodeShort)code);
 
@@ -155,9 +154,9 @@ namespace VoiceAssistant.Handles
                 { "Ч", (ScanCodeShort)45 },
                 { "Ш", (ScanCodeShort)23 },
                 { "Щ", (ScanCodeShort)24 },
-                { "Ь", (ScanCodeShort)50 },
-                { "Ы", (ScanCodeShort)31 },
                 { "Ъ", (ScanCodeShort)27 },
+                { "Ы", (ScanCodeShort)31 },
+                { "Ь", (ScanCodeShort)50 },
                 { "Э", (ScanCodeShort)40 },
                 { "Ю", (ScanCodeShort)52 },
                 { "Я", (ScanCodeShort)44 },
