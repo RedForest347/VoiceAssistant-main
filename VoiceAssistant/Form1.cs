@@ -22,7 +22,7 @@ namespace VoiceAssistant
         private void Form1_Load(object sender, EventArgs e)
         {
             Init();
-            LoadListenManager();
+            LoadListenManager();            
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -36,20 +36,6 @@ namespace VoiceAssistant
             VoiceAssistant.Handles.PressKeyObserver.Stop();
             lm?.Stop();
         }
-
-        #region Click
-
-        private void ClearLogButton_Click(object sender, EventArgs e)
-        {
-            Debug.ClearLog();
-        }
-
-        private void RecogniseButton_Click(object sender, EventArgs e)
-        {
-            LoadListenManager();
-        }
-
-        #endregion Click
 
         ListenManager lm;
 
@@ -68,6 +54,27 @@ namespace VoiceAssistant
                 lm.Start();
             }
         }
+
+        #region Click
+
+        private void ClearLogButton_Click(object sender, EventArgs e)
+        {
+            Debug.ClearLog();
+        }
+
+        private void RecogniseButton_Click(object sender, EventArgs e)
+        {
+            LoadListenManager();
+        }
+
+        private void TestButton_Click(object sender, EventArgs e)
+        {
+            Test.Listen();
+        }
+
+        #endregion Click
+
+
 
 
 
@@ -112,5 +119,13 @@ namespace VoiceAssistant
                 }
             }
         }
+
+
+
+        public void InvokeFunc(Delegate method)
+        {
+            Invoke(method);
+        }
+
     }
 }
