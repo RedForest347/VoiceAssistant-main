@@ -35,6 +35,7 @@
             this.ConfidenceBox = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.RecogniseButton = new System.Windows.Forms.Button();
+            this.TestButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -117,12 +118,23 @@
             this.RecogniseButton.UseVisualStyleBackColor = true;
             this.RecogniseButton.Click += new System.EventHandler(this.RecogniseButton_Click);
             // 
+            // TestButton
+            // 
+            this.TestButton.Location = new System.Drawing.Point(136, 144);
+            this.TestButton.Name = "TestButton";
+            this.TestButton.Size = new System.Drawing.Size(131, 67);
+            this.TestButton.TabIndex = 11;
+            this.TestButton.Text = "Test Button";
+            this.TestButton.UseVisualStyleBackColor = true;
+            this.TestButton.Click += new System.EventHandler(this.TestButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(734, 473);
+            this.Controls.Add(this.TestButton);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.MinimumSize = new System.Drawing.Size(750, 230);
@@ -147,6 +159,7 @@
         private System.Windows.Forms.TextBox ConfidenceBox;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button RecogniseButton;
+        private System.Windows.Forms.Button TestButton;
     }
 }
 

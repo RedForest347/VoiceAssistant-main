@@ -55,15 +55,15 @@ namespace VoiceAssistant
         //останавливает текущее прослушивание и запускает новое
         public void Start()
         {
-            StopCurrentListening();
-            StartListenAssistantNameInternal(AssistantNameRecognised);
+            //StopCurrentListening();
+            //StartListenAssistantNameInternal(AssistantNameRecognised);
         }
 
         public void Restart()
         {
-            Deinit();
-            Init();
-            Start();
+            //Deinit();
+            //Init();
+            //Start();
         }
 
         public void Stop()

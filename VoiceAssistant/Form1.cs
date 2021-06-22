@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
+using VoiceAssistant.Server;
 
 namespace VoiceAssistant
 {
     public partial class Form1 : Form
     {
         public event Action<float> OnConfidenceChanged;
-        public event Action onExit;
+        public static event Action onExit;
 
         public Form1()
         {
@@ -23,6 +24,13 @@ namespace VoiceAssistant
         {
             Init();
             LoadListenManager();
+            //RecognitionServer.NewListenAsync(DDD);
+        }
+
+        void DDD(string mes)
+        {
+            Debug.Log("[mes] " + mes);
+            //RecognitionServer.NewListenAsync(DDD);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -47,6 +55,11 @@ namespace VoiceAssistant
         private void RecogniseButton_Click(object sender, EventArgs e)
         {
             LoadListenManager();
+        }
+
+        private void TestButton_Click(object sender, EventArgs e)
+        {
+            RecognitionServer.NewListenAsync(DDD);
         }
 
         #endregion Click
