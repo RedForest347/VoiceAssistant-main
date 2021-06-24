@@ -45,10 +45,14 @@ namespace VoiceAssistant.Server
 
         public static void Deinit()
         {
-            SendMessageToClient("end");
-
+            if (handler != null)
+            {
+                SendMessageToClient("end");
+            }
+            Console.WriteLine("CloseConnection(handler);");
             CloseConnection(handler);
             handler = null;
+            Console.WriteLine("CloseConnection(listenSocket);");
             CloseConnection(listenSocket);
             listenSocket = null;
 
@@ -66,7 +70,7 @@ namespace VoiceAssistant.Server
                 SendMessageToClient("continue");
                 CloseConnection(handler);
             }
-
+            Console.WriteLine("0");
             string clientMessage = await Task.Run(ListenMessage);
             Message mes = ConvertJsonMes(clientMessage);
 
@@ -90,23 +94,26 @@ namespace VoiceAssistant.Server
 
         static string ListenMessage()
         {
+            Console.WriteLine("0.1");
             try
             {
                 while (true)
                 {
+                    Console.WriteLine("0.2");
                     handler = listenSocket.Accept();
                     // получаем сообщение
                     StringBuilder builder = new StringBuilder();
                     int bytes = 0; // количество полученных байтов
                     byte[] data = new byte[256]; // буфер для получаемых данных
-
+                    Console.WriteLine("1");
                     do
                     {
                         bytes = handler.Receive(data);
                         builder.Append(Encoding.UTF8.GetString(data, 0, bytes));
+                        Console.WriteLine("2");
                     }
                     while (handler.Available > 0);
-
+                    Console.WriteLine("3");
                     string clientMessage = builder.ToString();
 
                     return clientMessage;
@@ -114,7 +121,7 @@ namespace VoiceAssistant.Server
             }
             catch (Exception ex)
             {
-                Debug.Log("[ERROR] " + ex.Message);
+                Debug.LogError(ex.Message);
             }
             return "";
         }
@@ -128,7 +135,7 @@ namespace VoiceAssistant.Server
             }
             catch (Exception e)
             {
-                Debug.Log("[ERROR] " + e.Message);
+                Debug.LogError(e.Message);
             }
 
             return new Message() { Text = "" };
@@ -137,14 +144,20 @@ namespace VoiceAssistant.Server
 
         static void SendMessageToClient(string answer)
         {
-            // отправляем ответ
             byte[] data = Encoding.UTF8.GetBytes(answer);
             handler.Send(data);
         }
 
         static void CloseConnection(Socket socket)
         {
+            if (socket == null)
+                return;
+
+            Console.WriteLine(socket.ProtocolType);
+            Console.WriteLine(socket.Blocking);
+
             socket.Shutdown(SocketShutdown.Both);
+
             socket.Close();
 
             //Debug.Log("соединение закрыто");

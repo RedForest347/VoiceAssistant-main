@@ -18,19 +18,13 @@ namespace VoiceAssistant
         {
             Debug.form1 = this;
             VoiceAssistant.Handles.PressKeyObserver.Start();
+            RecognitionServer.Init();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             Init();
             LoadListenManager();
-            //RecognitionServer.NewListenAsync(DDD);
-        }
-
-        void DDD(string mes)
-        {
-            Debug.Log("[mes] " + mes);
-            //RecognitionServer.NewListenAsync(DDD);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -59,7 +53,7 @@ namespace VoiceAssistant
 
         private void TestButton_Click(object sender, EventArgs e)
         {
-            RecognitionServer.NewListenAsync(DDD);
+            RecognitionServer.NewListenAsync(null);
         }
 
         #endregion Click
