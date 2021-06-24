@@ -17,11 +17,13 @@ using System.Threading.Tasks;
 /// 4)  возврат к пункту 2
 /// 
 /// 
-/// сообщения клиенту:
+/// сообщения клиенту:  
 ///     continue
 ///     end
-/// 
-/// 
+///     
+/// сообщения от клиента:
+///     client started
+///     распознанный текст
 /// 
 /// </summary>
 
@@ -45,14 +47,15 @@ namespace VoiceAssistant.Server
 
         public static void Deinit()
         {
+            connectionIaAlive = false;
+
             if (handler != null)
             {
                 SendMessageToClient("end");
             }
-            Console.WriteLine("CloseConnection(handler);");
+
             CloseConnection(handler);
             handler = null;
-            Console.WriteLine("CloseConnection(listenSocket);");
             CloseConnection(listenSocket);
             listenSocket = null;
 
@@ -68,13 +71,33 @@ namespace VoiceAssistant.Server
             else
             {
                 SendMessageToClient("continue");
-                CloseConnection(handler);
+                handler = null;
             }
-            Console.WriteLine("0");
-            string clientMessage = await Task.Run(ListenMessage);
-            Message mes = ConvertJsonMes(clientMessage);
 
-            onRecognise?.Invoke(mes.Text);
+            string clientMessage = await Task.Run(ListenMessage);
+
+            if (clientMessage == "client started")
+            {
+                Debug.Log("client started");
+                NewListenAsync(onRecognise);
+                return;
+            }
+            if (String.IsNullOrEmpty(clientMessage))
+            {
+                if (connectionIaAlive)
+                {
+                    NewListenAsync(onRecognise);
+                    Debug.LogError("Empty clientMessage");
+                    return;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            Message message = ConvertJsonMes(clientMessage);
+            onRecognise?.Invoke(message.Text);
         }
 
         static void InitListen()
@@ -89,31 +112,29 @@ namespace VoiceAssistant.Server
             listenSocket.Listen(1);
 
             initialized = true;
+            connectionIaAlive = true;
             Debug.Log("сервер начал свою работу");     
         }
 
         static string ListenMessage()
         {
-            Console.WriteLine("0.1");
             try
             {
                 while (true)
                 {
-                    Console.WriteLine("0.2");
                     handler = listenSocket.Accept();
-                    // получаем сообщение
                     StringBuilder builder = new StringBuilder();
                     int bytes = 0; // количество полученных байтов
                     byte[] data = new byte[256]; // буфер для получаемых данных
-                    Console.WriteLine("1");
+
+                    // получаем сообщение
                     do
                     {
                         bytes = handler.Receive(data);
                         builder.Append(Encoding.UTF8.GetString(data, 0, bytes));
-                        Console.WriteLine("2");
                     }
                     while (handler.Available > 0);
-                    Console.WriteLine("3");
+
                     string clientMessage = builder.ToString();
 
                     return clientMessage;
@@ -121,7 +142,7 @@ namespace VoiceAssistant.Server
             }
             catch (Exception ex)
             {
-                Debug.LogError(ex.Message);
+                Console.WriteLine("[ERROR ListenMessage] " + ex.Message);
             }
             return "";
         }
@@ -153,34 +174,20 @@ namespace VoiceAssistant.Server
             if (socket == null)
                 return;
 
-            Console.WriteLine(socket.ProtocolType);
-            Console.WriteLine(socket.Blocking);
+            try
+            {
+                if (connectionIaAlive)
+                    socket.Shutdown(SocketShutdown.Both);
 
-            socket.Shutdown(SocketShutdown.Both);
-
-            socket.Close();
-
-            //Debug.Log("соединение закрыто");
+                socket.Close();
+                Debug.Log("соединение закрыто");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("[ERROR CloseConnection] " + e.Message);
+            }
+            
         }
-
-        /*public static void Abort()
-        {
-            Debug.Log("ConnectionInAvalible = " + ConnectionInAvalible(handler));
-
-            //handler.Shutdown(SocketShutdown.Both);
-            //handler.Close();
-        }*/
-
-        /*static bool ConnectionInAvalible(Socket s)
-        {
-            bool part1 = s.Poll(1000, SelectMode.SelectRead);
-            //bool part2 = (s.Available == 0);
-            bool part2 = true;
-            if ((part1 && part2) || !s.Connected)
-                return false;
-            else
-                return true;
-        }*/
     }
 
 

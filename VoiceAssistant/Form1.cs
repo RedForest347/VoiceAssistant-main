@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using VoiceAssistant.Handles;
 using VoiceAssistant.Server;
 
 namespace VoiceAssistant
@@ -9,6 +10,8 @@ namespace VoiceAssistant
         public event Action<float> OnConfidenceChanged;
         public static event Action onExit;
 
+        bool alive = true;
+
         public Form1()
         {
             InitializeComponent();
@@ -17,8 +20,15 @@ namespace VoiceAssistant
         private void Init()
         {
             Debug.form1 = this;
-            VoiceAssistant.Handles.PressKeyObserver.Start();
+            PressKeyObserver.Start();
             RecognitionServer.Init();
+        }
+
+        private void Deinit()
+        {
+            alive = false;
+            PressKeyObserver.Stop();
+            lm?.Stop();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -33,11 +43,6 @@ namespace VoiceAssistant
             onExit?.Invoke();
         }
 
-        private void Deinit()
-        {
-            VoiceAssistant.Handles.PressKeyObserver.Stop();
-            lm?.Stop();
-        }
 
         #region Click
 
@@ -83,15 +88,21 @@ namespace VoiceAssistant
 
         public void WriteMassage(string text)
         {
-            Action writeLog = () => MessageForm.Text += "\n" + text + "\n";
-            Invoke(writeLog);
-            panel1.VerticalScroll.Value = panel1.VerticalScroll.Maximum;
+            if (alive)
+            {
+                Action writeLog = () => MessageForm.Text += "\n" + text + "\n";
+                Invoke(writeLog);
+                panel1.VerticalScroll.Value = panel1.VerticalScroll.Maximum;
+            }
         }
 
         public void ClearLog()
         {
-            Action clearLogDelegate = new Action(() => MessageForm.Text = "Log: ");
-            Invoke(clearLogDelegate);
+            if (alive)
+            {
+                Action clearLogDelegate = new Action(() => MessageForm.Text = "Log: ");
+                Invoke(clearLogDelegate);
+            }
         }
 
 
