@@ -332,3 +332,16 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+
+
+#SELF
+
+#ignore compil python recognise program
+RecogniseClientPy/dist
+RecogniseClientPy/__pycache__
+RecogniseClientPy/build
+RecogniseClientPy/client.spec
+
+
+
+
