@@ -66,7 +66,7 @@ namespace VoiceAssistant
         void StartRecognise()
         {
             List<string[]> choses = ConstructChosesFromDataFile();
-            lm.StartListenCustomCommand(choses, OnRecogniseCustomCommand);
+            //lm.StartListenCustomCommand(choses, OnRecogniseCustomCommand);
         }
 
         List<string[]> ConstructChosesFromDataFile()
@@ -90,7 +90,7 @@ namespace VoiceAssistant
             return new string[] { "закрыть сервис" };
         }
 
-        void OnRecogniseCustomCommand(object sender, Microsoft.Speech.Recognition.SpeechRecognizedEventArgs e)
+        /*void OnRecogniseCustomCommand(object sender, Microsoft.Speech.Recognition.SpeechRecognizedEventArgs e)
         {
             string command = e.Result.Text;
 
@@ -110,7 +110,7 @@ namespace VoiceAssistant
             Debug.Log("будет нажата клавиша " + commandDictionary[command]);
             DoPressButton(new string[] { command });
             StartRecognise();
-        }
+        }*/
 
 
         void DoPressButton(string[] recognisedWords)

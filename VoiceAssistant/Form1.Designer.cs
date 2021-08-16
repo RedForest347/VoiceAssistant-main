@@ -36,6 +36,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.RecogniseButton = new System.Windows.Forms.Button();
             this.TestButton = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -124,9 +125,19 @@
             this.TestButton.Name = "TestButton";
             this.TestButton.Size = new System.Drawing.Size(131, 67);
             this.TestButton.TabIndex = 11;
-            this.TestButton.Text = "Test Button";
+            this.TestButton.Text = "Start Server";
             this.TestButton.UseVisualStyleBackColor = true;
             this.TestButton.Click += new System.EventHandler(this.TestButton_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(43, 44);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(128, 54);
+            this.button1.TabIndex = 12;
+            this.button1.Text = "Stop Server";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
@@ -134,6 +145,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(734, 473);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.TestButton);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -160,6 +172,7 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button RecogniseButton;
         private System.Windows.Forms.Button TestButton;
+        private System.Windows.Forms.Button button1;
     }
 }
 

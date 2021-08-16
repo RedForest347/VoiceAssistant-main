@@ -34,8 +34,8 @@ namespace VoiceAssistant.Server
     class RecognitionServer
     {
         static int port = 8005; // порт для приема входящих запросов
-        static Socket listenSocket;
-        static Socket handler;
+        public static Socket listenSocket;
+        public static Socket handler;
 
         static bool initialized = false;
         static bool connectionIaAlive = false;
@@ -87,7 +87,7 @@ namespace VoiceAssistant.Server
                 if (connectionIaAlive)
                 {
                     NewListenAsync(onRecognise);
-                    Debug.LogError("Empty clientMessage");
+                    Debug.LogWarning("Empty clientMessage");
                     return;
                 }
                 else
@@ -96,7 +96,7 @@ namespace VoiceAssistant.Server
                 }
             }
 
-            Message message = ConvertJsonMes(clientMessage);
+            Message message = ConvertJsonToMes(clientMessage);
             onRecognise?.Invoke(message.Text);
         }
 
@@ -122,7 +122,9 @@ namespace VoiceAssistant.Server
             {
                 while (true)
                 {
+                    //Debug.Log("before Accept");
                     handler = listenSocket.Accept();
+                    //Debug.Log("Accept");
                     StringBuilder builder = new StringBuilder();
                     int bytes = 0; // количество полученных байтов
                     byte[] data = new byte[256]; // буфер для получаемых данных
@@ -130,6 +132,7 @@ namespace VoiceAssistant.Server
                     // получаем сообщение
                     do
                     {
+                        //Debug.Log("do получение сообщения");
                         bytes = handler.Receive(data);
                         builder.Append(Encoding.UTF8.GetString(data, 0, bytes));
                     }
@@ -142,12 +145,15 @@ namespace VoiceAssistant.Server
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[ERROR ListenMessage] " + ex.Message);
+                //connectionIaAlive = false;
+                Debug.LogError("Соединение сброшено " + ex.Message);
+                Deinit();
+                //Console.WriteLine("[ERROR ListenMessage] " + ex.Message);
             }
             return "";
         }
 
-        static Message ConvertJsonMes(string clientMessage)
+        static Message ConvertJsonToMes(string clientMessage)
         {
             try
             {
@@ -166,7 +172,14 @@ namespace VoiceAssistant.Server
         static void SendMessageToClient(string answer)
         {
             byte[] data = Encoding.UTF8.GetBytes(answer);
-            handler.Send(data);
+
+            if (handler == null)
+            {
+
+                Debug.LogError("handler == null " + " answer = " + answer);
+            }
+
+            handler.Send(data); /// происходит ошибка если клиент принудительно разорвал соединение
         }
 
         static void CloseConnection(Socket socket)
@@ -200,9 +213,16 @@ namespace VoiceAssistant.Server
         public Message() { }
     }
 
-
+    //возможно, на будущее
     class MessageAdvansed
     {
 
+    }
+
+    enum ServerState
+    {
+        Disable = 0,
+        Work = 1,
+        Wait = 2,
     }
 }

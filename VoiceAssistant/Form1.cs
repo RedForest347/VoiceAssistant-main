@@ -58,7 +58,17 @@ namespace VoiceAssistant
 
         private void TestButton_Click(object sender, EventArgs e)
         {
-            RecognitionServer.NewListenAsync(null);
+            //RecognitionServer.NewListenAsync(null);
+            ListenBuilder builder = new ListenBuilder();
+            builder.Build();
+            ListenManager lm = new ListenManager(builder);
+            //lm.Start();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //RecognitionServer.Deinit();
+            //RecognitionServer.listenSocket.Close();
         }
 
         #endregion Click

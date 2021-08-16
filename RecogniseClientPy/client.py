@@ -76,7 +76,7 @@ WaitServer(1)
 print("loaded")
 
 ListenCommand(rec)
-
+print("end")
 
 
 
