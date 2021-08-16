@@ -1,0 +1,6 @@
+https://www.cyberforum.ru/csharp-net/thread1526303.html
+https://docs.microsoft.com/en-us/dotnet/framework/network-programming/asynchronous-server-socket-example?redirectedfrom=MSDN
+https://docs.microsoft.com/en-us/dotnet/framework/network-programming/asynchronous-client-socket-example?redirectedfrom=MSDN
+
+
+
