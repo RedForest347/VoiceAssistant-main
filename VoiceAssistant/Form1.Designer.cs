@@ -120,11 +120,11 @@
             // 
             // TestButton
             // 
-            this.TestButton.Location = new System.Drawing.Point(95, 124);
+            this.TestButton.Location = new System.Drawing.Point(136, 144);
             this.TestButton.Name = "TestButton";
-            this.TestButton.Size = new System.Drawing.Size(156, 84);
+            this.TestButton.Size = new System.Drawing.Size(131, 67);
             this.TestButton.TabIndex = 11;
-            this.TestButton.Text = "button1";
+            this.TestButton.Text = "Test Button";
             this.TestButton.UseVisualStyleBackColor = true;
             this.TestButton.Click += new System.EventHandler(this.TestButton_Click);
             // 

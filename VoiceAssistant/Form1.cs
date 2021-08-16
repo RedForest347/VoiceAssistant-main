@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Windows.Forms;
+using VoiceAssistant.Handles;
+using VoiceAssistant.Server;
 
 namespace VoiceAssistant
 {
     public partial class Form1 : Form
     {
         public event Action<float> OnConfidenceChanged;
-        public event Action onExit;
+        public static event Action onExit;
+
+        bool alive = true;
 
         public Form1()
         {
@@ -16,13 +20,21 @@ namespace VoiceAssistant
         private void Init()
         {
             Debug.form1 = this;
-            VoiceAssistant.Handles.PressKeyObserver.Start();
+            PressKeyObserver.Start();
+            RecognitionServer.Init();
+        }
+
+        private void Deinit()
+        {
+            alive = false;
+            PressKeyObserver.Stop();
+            lm?.Stop();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             Init();
-            LoadListenManager();            
+            LoadListenManager();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -31,11 +43,25 @@ namespace VoiceAssistant
             onExit?.Invoke();
         }
 
-        private void Deinit()
+
+        #region Click
+
+        private void ClearLogButton_Click(object sender, EventArgs e)
         {
-            VoiceAssistant.Handles.PressKeyObserver.Stop();
-            lm?.Stop();
+            Debug.ClearLog();
         }
+
+        private void RecogniseButton_Click(object sender, EventArgs e)
+        {
+            LoadListenManager();
+        }
+
+        private void TestButton_Click(object sender, EventArgs e)
+        {
+            RecognitionServer.NewListenAsync(null);
+        }
+
+        #endregion Click
 
         ListenManager lm;
 
@@ -55,27 +81,6 @@ namespace VoiceAssistant
             }
         }
 
-        #region Click
-
-        private void ClearLogButton_Click(object sender, EventArgs e)
-        {
-            Debug.ClearLog();
-        }
-
-        private void RecogniseButton_Click(object sender, EventArgs e)
-        {
-            LoadListenManager();
-        }
-
-        private void TestButton_Click(object sender, EventArgs e)
-        {
-            Test.Listen();
-        }
-
-        #endregion Click
-
-
-
 
 
         #region ForDebugLog
@@ -83,15 +88,21 @@ namespace VoiceAssistant
 
         public void WriteMassage(string text)
         {
-            Action writeLog = () => MessageForm.Text += "\n" + text + "\n";
-            Invoke(writeLog);
-            panel1.VerticalScroll.Value = panel1.VerticalScroll.Maximum;
+            if (alive)
+            {
+                Action writeLog = () => MessageForm.Text += "\n" + text + "\n";
+                Invoke(writeLog);
+                panel1.VerticalScroll.Value = panel1.VerticalScroll.Maximum;
+            }
         }
 
         public void ClearLog()
         {
-            Action clearLogDelegate = new Action(() => MessageForm.Text = "Log: ");
-            Invoke(clearLogDelegate);
+            if (alive)
+            {
+                Action clearLogDelegate = new Action(() => MessageForm.Text = "Log: ");
+                Invoke(clearLogDelegate);
+            }
         }
 
 
@@ -119,13 +130,5 @@ namespace VoiceAssistant
                 }
             }
         }
-
-
-
-        public void InvokeFunc(Delegate method)
-        {
-            Invoke(method);
-        }
-
     }
 }
