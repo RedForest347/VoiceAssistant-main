@@ -92,7 +92,7 @@
             this.ConfidenceBox.Location = new System.Drawing.Point(145, 56);
             this.ConfidenceBox.Multiline = true;
             this.ConfidenceBox.Name = "ConfidenceBox";
-            this.ConfidenceBox.Size = new System.Drawing.Size(144, 45);
+            this.ConfidenceBox.Size = new System.Drawing.Size(144, 46);
             this.ConfidenceBox.TabIndex = 9;
             this.ConfidenceBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ConfidenceBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ConfidenceBox_KeyDown);
