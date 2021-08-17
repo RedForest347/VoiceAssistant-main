@@ -49,6 +49,7 @@ namespace VoiceAssistant
 
         void DoOpenFolder(string[] recognisedWords)
         {
+            Debug.Log("DoOpenFolder");
             string command = ConvertToCommand(recognisedWords);
 
             if (!commandDictionary.ContainsKey(command))
@@ -58,7 +59,7 @@ namespace VoiceAssistant
             }
 
             string filePath = commandDictionary[command];
-
+            Debug.Log("System.Diagnostics.Process.Start(" + filePath + ");");
             System.Diagnostics.Process.Start(filePath);
         }
 
