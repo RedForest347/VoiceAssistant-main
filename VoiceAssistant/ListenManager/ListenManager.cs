@@ -55,6 +55,7 @@ namespace VoiceAssistant
         //останавливает текущее прослушивание и запускает новое
         public void Start()
         {
+            StartRecogniseAssistantName();
             //RecognitionServer.Init();
             //StopCurrentListening();
             //StartListenAssistantNameInternal(AssistantNameRecognised);
@@ -109,8 +110,108 @@ namespace VoiceAssistant
         public void ReturnControl()
         {
             Debug.Log("Сервис закончил свою работу. повторный запуск ListenManager");
-            //StartListenAssistantNameInternal(AssistantNameRecognised);
+            StartRecogniseAssistantName();
         }
+
+
+        #region Recognise new
+
+        List<string[]> currentChoices;
+        Action<string> currentOnRecognise;
+
+        public void StartRecognise(List<string[]> choses, Action<string> onRecognise)
+        {
+            StartRecogniseInternal(choses, onRecognise);
+        }
+
+        void StartRecogniseAssistantName()
+        {
+            List<string[]> choses = new List<string[]> { new string[] { ls.AssistantName } };
+            StartRecogniseInternal(choses, AssistentNameRecognised);
+        }
+
+        void StartRecogniseInternal(List<string[]> choices, Action<string> onRecognise)
+        {
+            currentChoices = choices;
+            currentOnRecognise = onRecognise;
+            RecognitionServer.NewListenAsync(CheckingRecognizedPhrase);
+        }
+
+        void CheckingRecognizedPhrase(string phrase)
+        {
+            if (ChoicesListContainPhrase(currentChoices, phrase))
+            {
+                Debug.Log("распознано \"" + phrase + "\"");
+                currentOnRecognise?.Invoke(phrase);
+            }
+            else
+            {
+                RecognitionServer.NewListenAsync(CheckingRecognizedPhrase);
+            }
+        }
+
+        bool ChoicesListContainPhrase(List<string[]> chosesList, string phrase)
+        {
+            string tempPhrase = phrase.ToLower();
+            bool wordWasFound = false;
+
+            for (int i = 0; i < chosesList.Count; i++)
+            {
+                for (int j = 0; j < chosesList[i].Length; j++)
+                {
+
+                    if (tempPhrase.StartsWith(chosesList[i][j].ToLower()))
+                    {
+                        tempPhrase = tempPhrase.Remove(0, chosesList[i][j].Length).Trim();
+                        wordWasFound = true;
+                        break;
+                    }
+                }
+                if (!wordWasFound)
+                {
+                    return false;
+                }
+                wordWasFound = false;
+            }
+
+            return tempPhrase.Length == 0;
+
+        }
+
+
+        void AssistentNameRecognised(string phrase)
+        {
+            Debug.Log("распознано имя голосового ассистента");
+            StartRecogniseInternal(ListListsToListArrays(choicesList), OnServiseCommandRecognise);
+        }
+
+        List<string[]> ListListsToListArrays(List<List<string>> list)
+        {
+            List<string[]> _out = new List<string[]>();
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                _out.Add(list[i].ToArray());
+            }
+            return _out;
+        }
+
+        void OnServiseCommandRecognise(string phrase)
+        {
+            string keyKommand = phrase.Split(new char[] {' ' })[0];
+            string[] commands = phrase.Split(new char[] { ' ' });
+
+            if (!recogniseDictionary.ContainsKey(keyKommand))
+            {
+                Debug.LogError("ключ " + keyKommand + " отсутствует в словаре");
+                return;
+            }
+            Debug.Log("распознана ключевая команда \"" + keyKommand + "\". вся фраза: \"" + phrase + "\"");
+            recogniseDictionary[keyKommand].Recognised(commands);
+        }
+
+        #endregion Recognise new
+
 
 
         #region Recognise

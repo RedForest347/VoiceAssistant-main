@@ -53,15 +53,15 @@ namespace VoiceAssistant
 
         private void RecogniseButton_Click(object sender, EventArgs e)
         {
-            LoadListenManager();
+            //LoadListenManager();
         }
 
         private void TestButton_Click(object sender, EventArgs e)
         {
             //RecognitionServer.NewListenAsync(null);
-            ListenBuilder builder = new ListenBuilder();
-            builder.Build();
-            ListenManager lm = new ListenManager(builder);
+            //ListenBuilder builder = new ListenBuilder();
+            //builder.Build();
+            //ListenManager lm = new ListenManager(builder);
             //lm.Start();
         }
 
