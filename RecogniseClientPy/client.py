@@ -62,19 +62,23 @@ def ListenCommand(rec):
         #         print("[", datetime.now().time(), "] " + "partial = " + text)
 
 
+def LoadVosk():
+    if not os.path.exists("model"):
+        print ("Please download the model from https://github.com/alphacep/vosk-api/blob/master/doc/models.md and unpack as 'model' in the current folder.")
+        exit (1)
+    model = Model("model")
+    global rec
+    wordArray = '["oh one two three four five six seven eight nine zero", "[привет]"]'
+    rec = KaldiRecognizer(model, 16000, wordArray)
+    # rec.SetMaxAlternatives(2)
+    SetLogLevel(-1)
 
-if not os.path.exists("model"):
-    print ("Please download the model from https://github.com/alphacep/vosk-api/blob/master/doc/models.md and unpack as 'model' in the current folder.")
-    exit (1)
-model = Model("model")
-global rec
-rec = KaldiRecognizer(model, 16000)
-# rec.SetMaxAlternatives(2)
-SetLogLevel(-1)
 
+
+
+LoadVosk()
 WaitServer(1)
 print("loaded")
-
 ListenCommand(rec)
 print("end")
 
