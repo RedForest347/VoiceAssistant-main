@@ -34,7 +34,6 @@ namespace VoiceAssistant
         private void Form1_Load(object sender, EventArgs e)
         {
             Init();
-            //LoadListenManager();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -51,26 +50,11 @@ namespace VoiceAssistant
             Debug.ClearLog();
         }
 
-        private void RecogniseButton_Click(object sender, EventArgs e)
-        {
-            //LoadListenManager();
-        }
-
         private void StartServerButton_Click(object sender, EventArgs e)
         {
             LoadListenManager();
-            //RecognitionServer.NewListenAsync(null);
-            //ListenBuilder builder = new ListenBuilder();
-            //builder.Build();
-            //ListenManager lm = new ListenManager(builder);
-            //lm.Start();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //RecognitionServer.Deinit();
-            //RecognitionServer.listenSocket.Close();
-        }
 
         #endregion Click
 

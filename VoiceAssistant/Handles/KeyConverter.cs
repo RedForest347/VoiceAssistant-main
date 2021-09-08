@@ -10,7 +10,9 @@ namespace VoiceAssistant.Handles
     static class KeysConverter
     {
 
-        // return Keys by its name or -1 if name is wrong
+        /// <summary>
+        /// return Keys by its name or -1 if name is wrong
+        /// </summary>
         public static Keys StringToKeys(string keyName)
         {
             if (Enum.TryParse(keyName, out Keys key))

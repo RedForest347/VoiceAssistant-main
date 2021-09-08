@@ -34,9 +34,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ConfidenceBox = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.RecogniseButton = new System.Windows.Forms.Button();
             this.TestButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -100,7 +98,7 @@
             // panel2
             // 
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.panel2.Controls.Add(this.RecogniseButton);
+            this.panel2.Controls.Add(this.TestButton);
             this.panel2.Controls.Add(this.ClearLogButton);
             this.panel2.Controls.Add(this.ConfidenceBox);
             this.panel2.Controls.Add(this.label1);
@@ -109,35 +107,15 @@
             this.panel2.Size = new System.Drawing.Size(293, 163);
             this.panel2.TabIndex = 10;
             // 
-            // RecogniseButton
-            // 
-            this.RecogniseButton.Location = new System.Drawing.Point(3, 3);
-            this.RecogniseButton.Name = "RecogniseButton";
-            this.RecogniseButton.Size = new System.Drawing.Size(286, 51);
-            this.RecogniseButton.TabIndex = 7;
-            this.RecogniseButton.Text = "Start recognise";
-            this.RecogniseButton.UseVisualStyleBackColor = true;
-            this.RecogniseButton.Click += new System.EventHandler(this.RecogniseButton_Click);
-            // 
             // TestButton
             // 
-            this.TestButton.Location = new System.Drawing.Point(158, 238);
+            this.TestButton.Location = new System.Drawing.Point(3, 3);
             this.TestButton.Name = "TestButton";
-            this.TestButton.Size = new System.Drawing.Size(148, 54);
+            this.TestButton.Size = new System.Drawing.Size(287, 51);
             this.TestButton.TabIndex = 11;
             this.TestButton.Text = "Start Server";
             this.TestButton.UseVisualStyleBackColor = true;
             this.TestButton.Click += new System.EventHandler(this.StartServerButton_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(16, 238);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(138, 54);
-            this.button1.TabIndex = 12;
-            this.button1.Text = "Stop Server";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
@@ -145,8 +123,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(734, 473);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.TestButton);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.MinimumSize = new System.Drawing.Size(750, 230);
@@ -170,9 +146,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox ConfidenceBox;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button RecogniseButton;
         private System.Windows.Forms.Button TestButton;
-        private System.Windows.Forms.Button button1;
     }
 }
 

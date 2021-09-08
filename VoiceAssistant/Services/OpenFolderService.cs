@@ -80,7 +80,7 @@ namespace VoiceAssistant
         private class OpenFolderData
         {
             [JsonIgnore]
-            static string filePath = @"data\foldersData.swmodel";
+            static string filePath = @"data\openFolderData.swmodel";
 
             [JsonProperty("Имя команды"), JsonRequired]
             public string commandName { get; set; }

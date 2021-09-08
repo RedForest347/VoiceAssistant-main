@@ -153,7 +153,7 @@ namespace VoiceAssistant
         private class OpenFileData
         {
             [JsonIgnore]
-            static string filePath = @"data\openFileData.swmodel";
+            static string filePath = @"data\startProgramData.swmodel";
 
             [JsonProperty("Имя команды"), JsonRequired]
             public string commandName { get; set; }

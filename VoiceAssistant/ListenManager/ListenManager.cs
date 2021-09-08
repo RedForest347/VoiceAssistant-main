@@ -33,8 +33,6 @@ namespace VoiceAssistant
 
         float requaredConfidence = 0.85f;
         Keys restartKey = Keys.Home;
-        //SpeechRecognitionEngine current_sre;
-        //EventHandler<SpeechRecognizedEventArgs> onRecogniseCurrent;
 
 
         public ListenManager(ListenBuilder builder)
@@ -81,20 +79,15 @@ namespace VoiceAssistant
             }
         }
 
-        //останавливает текущее прослушивание и запускает новое
+
         public void Start()
         {
             StartRecogniseAssistantName();
-            //RecognitionServer.Init();
-            //StopCurrentListening();
-            //StartListenAssistantNameInternal(AssistantNameRecognised);
         }
 
         public void Restart()
         {
-            //Deinit();
-            //Init();
-            //Start();
+            // мб добавить
         }
 
         public void Stop()
@@ -317,7 +310,7 @@ namespace VoiceAssistant
 
         void KeyPressed(Keys key)
         {
-            if (key == restartKey /*&& PressKeyObserver.KeyPressed(Keys.LShiftKey)*/)
+            if (key == restartKey)
             {
                 Restart();
             }
@@ -327,11 +320,6 @@ namespace VoiceAssistant
 
         #endregion KeyPress
 
-
-        void ChangeConfidence(float newConfidence)
-        {
-            requaredConfidence = newConfidence;
-        }
 
         private class ListenSettings
         {
