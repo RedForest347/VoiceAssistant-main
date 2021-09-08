@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -24,14 +26,13 @@ namespace VoiceAssistant
 
     class ListenManager
     {
+        Process recognitionClient;
         Dictionary<string, RecogniseData> recogniseDictionary;
         List<List<string>> choicesList;
         ListenSettings ls;
 
         float requaredConfidence = 0.85f;
         Keys restartKey = Keys.Home;
-        //SpeechRecognitionEngine current_sre;
-        //EventHandler<SpeechRecognizedEventArgs> onRecogniseCurrent;
 
 
         public ListenManager(ListenBuilder builder)
@@ -39,7 +40,33 @@ namespace VoiceAssistant
             recogniseDictionary = builder.GetRecogniseDictionary;
             choicesList = builder.GetChoicesList;
             Init();
+            StartRecogniseClient();
+            Form1.onExit += StopRecogniseClient;
         }
+
+        //https://social.msdn.microsoft.com/Forums/ru-RU/a8d2016b-7dee-48d8-8d7b-856e7b91bfbe/c-108210721082-quot10891074107710881085109110901100quot?forum=fordesktopru
+        //как свернуть программу
+        void StartRecogniseClient()
+        {
+            string filePath = "recognise module\\client.exe";
+
+            if (!File.Exists(filePath))
+                return;
+
+            recognitionClient = new Process();
+            recognitionClient.StartInfo.FileName = Path.GetFileName(filePath);
+            recognitionClient.StartInfo.WorkingDirectory = Path.GetDirectoryName(filePath);
+            recognitionClient.Start();
+        }
+
+        void StopRecogniseClient()
+        {
+            if (recognitionClient != null)
+            {
+                recognitionClient.Kill();
+            }
+        }
+
 
         void InitServices()
         {
@@ -52,20 +79,15 @@ namespace VoiceAssistant
             }
         }
 
-        //останавливает текущее прослушивание и запускает новое
+
         public void Start()
         {
             StartRecogniseAssistantName();
-            //RecognitionServer.Init();
-            //StopCurrentListening();
-            //StartListenAssistantNameInternal(AssistantNameRecognised);
         }
 
         public void Restart()
         {
-            //Deinit();
-            //Init();
-            //Start();
+            // мб добавить
         }
 
         public void Stop()
@@ -213,57 +235,6 @@ namespace VoiceAssistant
         #endregion Recognise new
 
 
-
-        #region Recognise
-
-
-        /*void RecognisedInternal(object sender, SpeechRecognizedEventArgs e)
-        {
-            if (e.Result.Confidence < requaredConfidence)
-            {
-                Debug.Log("не распознано \"" + e.Result.Text + "\". Точность " + e.Result.Confidence);
-                return;
-            }
-
-            Debug.Log("Распознано \"" + e.Result.Text + "\". Точность " + e.Result.Confidence);
-            StopCurrentListening();
-            onRecogniseCurrent(sender, e);
-
-        }*/
-
-        /*void AssistantNameRecognised(object sender, SpeechRecognizedEventArgs e)
-        {
-            if (e.Result.Confidence < requaredConfidence)
-            {
-                return;
-            }
-
-            StartListenServiceCommandInternal(ServiceCommandRecognised);
-        }*/
-
-        /*void ServiceCommandRecognised(object sender, SpeechRecognizedEventArgs e)
-        {
-            string keyKommand = e.Result.Words.ElementAt(0).Text;
-            string[] commands = new string[e.Result.Words.Count];
-
-            for (int i = 0; i < e.Result.Words.Count; i++)
-            {
-                commands[i] = e.Result.Words.ElementAt(i).Text;
-            }
-
-            if (!recogniseDictionary.ContainsKey(keyKommand))
-            {
-                Debug.LogError("ключ " + keyKommand + " отсутствует в словаре");
-                return;
-            }
-
-            recogniseDictionary[keyKommand].Recognised(commands);
-        }*/
-
-
-        #endregion Recognised
-
-
         #region Start Listen
 
 
@@ -339,7 +310,7 @@ namespace VoiceAssistant
 
         void KeyPressed(Keys key)
         {
-            if (key == restartKey /*&& PressKeyObserver.KeyPressed(Keys.LShiftKey)*/)
+            if (key == restartKey)
             {
                 Restart();
             }
@@ -349,11 +320,6 @@ namespace VoiceAssistant
 
         #endregion KeyPress
 
-
-        void ChangeConfidence(float newConfidence)
-        {
-            requaredConfidence = newConfidence;
-        }
 
         private class ListenSettings
         {
