@@ -10,7 +10,7 @@ using VoiceAssistant.Handles;
 
 namespace VoiceAssistant
 {
-    class StartFileService : ServiceBase
+    class StartProgrammService : ServiceBase
     {
         List<string> firstWords = new List<string> { "запусти" };
         List<string> secondWords;

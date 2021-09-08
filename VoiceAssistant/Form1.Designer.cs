@@ -121,19 +121,19 @@
             // 
             // TestButton
             // 
-            this.TestButton.Location = new System.Drawing.Point(136, 144);
+            this.TestButton.Location = new System.Drawing.Point(158, 238);
             this.TestButton.Name = "TestButton";
-            this.TestButton.Size = new System.Drawing.Size(131, 67);
+            this.TestButton.Size = new System.Drawing.Size(148, 54);
             this.TestButton.TabIndex = 11;
             this.TestButton.Text = "Start Server";
             this.TestButton.UseVisualStyleBackColor = true;
-            this.TestButton.Click += new System.EventHandler(this.TestButton_Click);
+            this.TestButton.Click += new System.EventHandler(this.StartServerButton_Click);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(43, 44);
+            this.button1.Location = new System.Drawing.Point(16, 238);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(128, 54);
+            this.button1.Size = new System.Drawing.Size(138, 54);
             this.button1.TabIndex = 12;
             this.button1.Text = "Stop Server";
             this.button1.UseVisualStyleBackColor = true;

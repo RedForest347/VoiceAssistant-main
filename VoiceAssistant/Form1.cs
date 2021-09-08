@@ -34,7 +34,7 @@ namespace VoiceAssistant
         private void Form1_Load(object sender, EventArgs e)
         {
             Init();
-            LoadListenManager();
+            //LoadListenManager();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -56,8 +56,9 @@ namespace VoiceAssistant
             //LoadListenManager();
         }
 
-        private void TestButton_Click(object sender, EventArgs e)
+        private void StartServerButton_Click(object sender, EventArgs e)
         {
+            LoadListenManager();
             //RecognitionServer.NewListenAsync(null);
             //ListenBuilder builder = new ListenBuilder();
             //builder.Build();

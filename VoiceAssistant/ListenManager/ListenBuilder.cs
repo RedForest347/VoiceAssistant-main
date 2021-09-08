@@ -34,7 +34,7 @@ namespace VoiceAssistant
         void LoadAllServices()
         {
             LoadService<OpenFolderService>();
-            LoadService<StartFileService>();
+            LoadService<StartProgrammService>();
             LoadService<PressButtonService>();
         }
 

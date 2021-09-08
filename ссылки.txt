@@ -1,0 +1,1 @@
+https://github.com/va-stepanov/vosk-model-ru-adaptation - инструкция по расширению словаря

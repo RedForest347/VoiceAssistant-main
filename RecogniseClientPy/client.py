@@ -68,19 +68,19 @@ def LoadVosk():
         exit (1)
     model = Model("model")
     global rec
-    wordArray = '["oh one two three four five six seven eight nine zero", "[привет]"]'
-    rec = KaldiRecognizer(model, 16000, wordArray)
+    #wordArray = '["oh one two three four five six seven eight nine zero", "[привет]"]'
+    rec = KaldiRecognizer(model, 16000)
     # rec.SetMaxAlternatives(2)
     SetLogLevel(-1)
 
 
-
-
-LoadVosk()
-WaitServer(1)
-print("loaded")
-ListenCommand(rec)
-print("end")
+print("ddd")
+input("Press Enter to continue...")
+# LoadVosk()
+# WaitServer(1)
+# print("loaded")
+# ListenCommand(rec)
+# print("end")
 
 
 
