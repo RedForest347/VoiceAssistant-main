@@ -43,6 +43,7 @@ namespace VoiceAssistant
         }
 
 
+
         #region Click
 
         private void ClearLogButton_Click(object sender, EventArgs e)
