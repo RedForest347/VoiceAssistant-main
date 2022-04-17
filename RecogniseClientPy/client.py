@@ -53,7 +53,7 @@ def ListenCommand(rec):
             result = x["text"]
             if len(result) > 0:
                 print("[", datetime.now().time(), "] " + "result = " + result)
-                SendMessage(str(x))
+                # SendMessage(str(x))
             
         # else:
         #     x=json.loads(rec.PartialResult())
@@ -74,13 +74,13 @@ def LoadVosk():
     SetLogLevel(-1)
 
 
-print("ddd")
-input("Press Enter to continue...")
-# LoadVosk()
+# print("ddd")
+# input("Press Enter to continue...")
+LoadVosk()
 # WaitServer(1)
-# print("loaded")
-# ListenCommand(rec)
-# print("end")
+print("loaded")
+ListenCommand(rec)
+print("end")
 
 
 
@@ -89,4 +89,5 @@ input("Press Enter to continue...")
 
 #
 # cd "D:\indi projects\VoiceAssistentProj\VoiceAssistant main\RecogniseClientPy"
+# cd "I:\indi projects\VoiceAssistent\RecogniseClientPy"
 # pyinstaller test.py
